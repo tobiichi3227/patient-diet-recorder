@@ -284,7 +284,7 @@ Vue.createApp({
       const encodedPassword = encodeURIComponent(patient_password);
 
       const qrCodeContainer = document.getElementById("qrCodeContainer");
-      const qrData = `https://lifeadventurer.github.io/patient-input-output-recorder/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
+      const qrData = `https://lifeadventurer.github.io/patient-intake-output-recorder/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
       const qrCode = qrcode(0, 'H');
       qrCode.addData(qrData);
       qrCode.make();

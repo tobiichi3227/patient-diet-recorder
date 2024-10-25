@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "patient-input-output-recorder"
+name = "patient-intake-output-recorder"
 version = "1.0.0"
 description = ""
 authors = ["lifeadventurer <life0adventurer@gmail.com>"]
