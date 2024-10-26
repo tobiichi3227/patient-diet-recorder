@@ -9,7 +9,8 @@ pre-commit install
 
 ## Language
 
-If you would like to add support for a new language, please follow the format provided below:
+If you would like to add support for a new language, please follow the format
+provided below:
 
 ```json
 "{language_code}": {
@@ -48,6 +49,9 @@ If you would like to add support for a new language, please follow the format pr
 ```
 
 - Replace `{language_code}` with the IETF BCP 47 language tag.
-- Replace `{Translate '...' here}` with the corresponding translation in the new language.
-- Add the language code and name to [supported_languages.json](./supported_languagues.json)
-- Add the JSON format you filled in above to the end of [lang_texts.json](./lang_texts.json)
+- Replace `{Translate '...' here}` with the corresponding translation in the new
+  language.
+- Add the language code and name to
+  [supported_languages.json](./supported_languagues.json)
+- Add the JSON format you filled in above to the end of
+  [lang_texts.json](./lang_texts.json)
