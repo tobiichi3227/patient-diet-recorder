@@ -6,4 +6,6 @@ backend/account_relations.json
 *.db
 config.json
 
-docs/
+docs/note.md
+
+site/
