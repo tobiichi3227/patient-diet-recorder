@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="./manifest.json">
+  <link rel="manifest" href="./manifest.json" />
 
   <title>Patient Intake/Output Recorder</title>
 
@@ -109,7 +109,7 @@
                   <h3 class="col-3 card-title mb-3">{{ patientAccount }}</h3>
                   <div class="col-1 mt-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                      style="cursor: pointer;" class="bi bi-qr-code-scan" viewBox="0 0 16 16"
+                      style="cursor: pointer" class="bi bi-qr-code-scan" viewBox="0 0 16 16"
                       @click="openQrCodeModal(index)">
                       <path
                         d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z" />
@@ -212,7 +212,7 @@
                       </h2>
                       <div class="accordion-collapse collapse" :id="`content_${index}`" aria-labelledby="recordSection"
                         data-bs-parent="#accordionExample">
-                        <div class="accordion-body" style="padding: 8px 10px;">
+                        <div class="accordion-body" style="padding: 8px 10px">
                           <template v-if="JSON.stringify(patientRecords[patientAccount]) !== '{}'">
                             <div v-for="(dailyRecord, index2) in reversedPatientRecords[patientAccount]">
                               <div class="accordion">
@@ -222,29 +222,20 @@
                                       :data-bs-target="`#content_${index2}`" aria-expanded="false"
                                       :aria-controls="`content_${index2}`">
                                       <div class="row">
-                                        <div class="col-4" style="
-                                              font-size: 20px;
-                                              margin-left: -10px;
-                                            ">
+                                        <div class="col-4" style="font-size: 20px; margin-left: -10px">
                                           <div class="recordDate">
                                             <b>{{ dailyRecord['recordDate']
                                               }}</b>
                                           </div>
                                         </div>
-                                        <div class="col-6" style="
-                                              font-size: 18px;
-                                              margin-left: 6px;
-                                            ">
+                                        <div class="col-6" style="font-size: 18px; margin-left: 6px">
                                           <div class="weight">
                                             <b>體重: {{ dailyRecord['weight']
                                               == 'NaN' ? '未測量' :
                                               dailyRecord['weight'] }}</b>
                                           </div>
                                         </div>
-                                        <div class="col-2" style="
-                                              white-space: nowrap;
-                                              font-size: 18px;
-                                            ">
+                                        <div class="col-2" style="white-space: nowrap; font-size: 18px">
                                           <div class="count">
                                             <b>{{ dailyRecord['count']
                                               }}筆資料</b>
@@ -255,8 +246,8 @@
                                   </h2>
                                   <div class="accordion-collapse collapse" :id="`content_${index2}`"
                                     aria-labelledby="recordSection" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body" style="padding: 8px 10px;">
-                                      <table class="table table-striped table-bordered" style="font-size: 18px;">
+                                    <div class="accordion-body" style="padding: 8px 10px">
+                                      <table class="table table-striped table-bordered" style="font-size: 18px">
                                         <thead>
                                           <tr class="text-center">
                                             <th scope="col">時間</th>
@@ -274,22 +265,24 @@
                                               <input
                                                 v-if="columnIndex !== 'time' && editingRecordPatientAccount === patientAccount && editingRecordIndex === index3"
                                                 class="form-control" type="number"
-                                                v-model="dailyRecord['data'][index3][columnIndex]">
+                                                v-model="dailyRecord['data'][index3][columnIndex]" />
                                               <span v-else>
                                                 {{ content }}
                                               </span>
                                             </td>
                                             <td class="justify-content-center align-items-center"
-                                              style="text-align: center; padding: 8px;">
+                                              style="text-align: center; padding: 8px">
                                               <span @click="toggleRecordEdit($event.target, patientAccount)"
                                                 :id="`${index2}-${index3}`" class="material-symbols-outlined"
-                                                style="display: inline-block; margin-left: 0px;">
-                                                {{ editingRecordPatientAccount ? 'check' : 'edit' }}
+                                                style="display: inline-block; margin-left: 0px">
+                                                {{ editingRecordPatientAccount
+                                                ? 'check' : 'edit' }}
                                               </span>
                                               <span @click="removeRecord($event.target, patientAccount)"
                                                 :id="`${index2}-${index3}`" class="material-symbols-outlined"
-                                                style="display: inline-block; margin-left: 4px;">
-                                                {{ removingRecord ? 'hourglass_top' : 'delete' }}
+                                                style="display: inline-block; margin-left: 4px">
+                                                {{ removingRecord ?
+                                                'hourglass_top' : 'delete' }}
                                               </span>
                                             </td>
                                           </tr>
@@ -355,7 +348,8 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="signUpModalLabel">註冊病患帳號</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉">
+              </button>
             </div>
             <div class="modal-body">
               <div v-if="signUpAlertMessage" :class="['alert', signUpAlertClass]" role="alert">
@@ -366,7 +360,7 @@
                 <div class="mb-3">
                   <label for="signUpPatientAccount" class="form-label">帳號</label>
                   <input type="text" class="form-control" id="signUpPatientAccount" v-model="signUpPatientAccount"
-                    required pattern=".*\S.*">
+                    required pattern=".*\S.*" />
                   <div class="invalid-feedback">
                     請輸入有效的帳號 (不能只包含空白字元)。
                   </div>
@@ -374,12 +368,14 @@
                 <div class="mb-3">
                   <label for="signUpPatientPassword" class="form-label">密碼</label>
                   <input type="text" class="form-control" id="signUpPatientPassword" v-model="signUpPatientPassword"
-                    required>
+                    required />
                   <div class="invalid-feedback">
                     請輸入密碼。
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary float-end">註冊</button>
+                <button type="submit" class="btn btn-primary float-end">
+                  註冊
+                </button>
               </form>
             </div>
           </div>
@@ -391,16 +387,19 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="manageModalLabel">管理病患帳號</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉">
+              </button>
             </div>
-            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto">
               <!-- First Section: Unmonitored Patients -->
               <h6 class="mb-3">未監測病患</h6>
               <div class="list-group mb-4">
                 <div class="list-group-item d-flex justify-content-between align-items-center"
                   v-for="(patient, index) in unmonitoredPatients" :key="index">
                   <span>{{ patient }}</span>
-                  <button class="btn btn-success btn-sm me-2" @click="addPatientToMonitor(index)">加入監測</button>
+                  <button class="btn btn-success btn-sm me-2" @click="addPatientToMonitor(index)">
+                    加入監測
+                  </button>
                 </div>
               </div>
 
@@ -411,8 +410,12 @@
                   v-for="(patient, index) in patientAccounts" :key="index">
                   <span>{{ patient }}</span>
                   <div>
-                    <button class="btn btn-warning btn-sm me-2" @click="removePatientFromMonitor(index)">取消監測</button>
-                    <button class="btn btn-danger btn-sm" @click="deletePatient(index)">出院</button>
+                    <button class="btn btn-warning btn-sm me-2" @click="removePatientFromMonitor(index)">
+                      取消監測
+                    </button>
+                    <button class="btn btn-danger btn-sm" @click="deletePatient(index)">
+                      出院
+                    </button>
                   </div>
                 </div>
               </div>
@@ -425,11 +428,15 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="qrCodeModalLabel">QR Code for {{ qrCodePatient }}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+              <h5 class="modal-title" id="qrCodeModalLabel">
+                QR Code for {{ qrCodePatient }}
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉">
+              </button>
             </div>
             <div class="modal-body">
-              <div class="d-flex justify-content-center" id="qrCodeContainer" style="display: block;"></div>
+              <div class="d-flex justify-content-center" id="qrCodeContainer" style="display: block">
+              </div>
             </div>
           </div>
         </div>

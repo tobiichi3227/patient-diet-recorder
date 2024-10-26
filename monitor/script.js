@@ -50,8 +50,8 @@ Vue.createApp({
   },
   methods: {
     async loadAPIEvents() {
-      const response = await fetch("./events.json")
-      this.events = await response.json()
+      const response = await fetch("./events.json");
+      this.events = await response.json();
     },
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
@@ -81,7 +81,9 @@ Vue.createApp({
     processFetchedData(fetchedData) {
       this.patientRecords = fetchedData["patient_records"];
       this.patientAccountsWithPasswords = fetchedData["patient_accounts"];
-      this.patientAccounts = this.patientAccountsWithPasswords.map(account => account[0]);
+      this.patientAccounts = this.patientAccountsWithPasswords.map((account) =>
+        account[0]
+      );
       this.patientAccounts.forEach((patientAccount) => {
         let modified = false;
         Object.entries(this.keysToFilter).forEach(([key, value]) => {
@@ -118,8 +120,13 @@ Vue.createApp({
         password: this.password,
       };
       const response = await this.postRequest(payload);
-      if (response.message === this.events.messages.FETCH_UNMONITORED_PATIENTS_SUCCESS) {
-        this.unmonitoredPatients = response["unmonitored_patients"].map(patient => patient[1]);
+      if (
+        response.message ===
+          this.events.messages.FETCH_UNMONITORED_PATIENTS_SUCCESS
+      ) {
+        this.unmonitoredPatients = response["unmonitored_patients"].map(
+          (patient) => patient[1],
+        );
       } else {
         console.error(response.message);
       }
@@ -141,7 +148,8 @@ Vue.createApp({
     },
     async removePatientFromMonitor(index) {
       const account = this.patientAccounts[index];
-      const [patient, patient_password] = this.patientAccountsWithPasswords.find(p => p[0] === account);
+      const [patient, patient_password] = this.patientAccountsWithPasswords
+        .find((p) => p[0] === account);
       const payload = {
         event: this.events.REMOVE_PATIENT,
         account: this.account,
@@ -162,7 +170,8 @@ Vue.createApp({
       if (!confirm(`請確認病患: ${account} 是否要出院?`)) {
         return;
       }
-      const [patient, patient_password] = this.patientAccountsWithPasswords.find(p => p[0] === account);
+      const [patient, patient_password] = this.patientAccountsWithPasswords
+        .find((p) => p[0] === account);
       const payload = {
         event: this.events.DELETE_PATIENT,
         account: this.account,
@@ -180,9 +189,9 @@ Vue.createApp({
     },
     async authenticate() {
       const fetchedData = await this.postRequest({
-          event: this.events.FETCH_MONITORING_PATIENTS,
-          account: this.account,
-          password: this.password,
+        event: this.events.FETCH_MONITORING_PATIENTS,
+        account: this.account,
+        password: this.password,
       });
       if (Object.prototype.hasOwnProperty.call(fetchedData, "message")) {
         switch (fetchedData.message) {
@@ -207,7 +216,7 @@ Vue.createApp({
 
             this.processFetchedData(fetchedData);
             this.filteredPatientAccounts = this.patientAccounts;
-            await this.fetchUnmonitoredPatients()
+            await this.fetchUnmonitoredPatients();
         }
       }
     },
@@ -258,14 +267,14 @@ Vue.createApp({
           return patientAccount
             .toLowerCase()
             .includes(this.searchQuery.toLowerCase());
-        }
+        },
       );
     }, 200),
     getFirstAndLastDates(patientAccount) {
       const keys = Object.keys(this.patientRecords[patientAccount]).filter(
         (key) => {
           return !(key in this.keysToFilter);
-        }
+        },
       );
       if (keys.length === 0) {
         return "無紀錄";
@@ -276,7 +285,8 @@ Vue.createApp({
     },
     openQrCodeModal(index) {
       const account = this.filteredPatientAccounts[index];
-      const [patient, patient_password] = this.patientAccountsWithPasswords.find(p => p[0] === account);
+      const [patient, patient_password] = this.patientAccountsWithPasswords
+        .find((p) => p[0] === account);
       this.qrCodePatient = patient;
       this.qrCodePatientPassword = patient_password;
 
@@ -284,8 +294,9 @@ Vue.createApp({
       const encodedPassword = encodeURIComponent(patient_password);
 
       const qrCodeContainer = document.getElementById("qrCodeContainer");
-      const qrData = `https://lifeadventurer.github.io/patient-intake-output-recorder/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
-      const qrCode = qrcode(0, 'H');
+      const qrData =
+        `https://lifeadventurer.github.io/patient-intake-output-recorder/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
+      const qrCode = qrcode(0, "H");
       qrCode.addData(qrData);
       qrCode.make();
 
@@ -297,7 +308,7 @@ Vue.createApp({
     },
     updateRestrictionText(patientAccount) {
       const limitAmount = String(
-        this.patientRecords[patientAccount]["limitAmount"]
+        this.patientRecords[patientAccount]["limitAmount"],
       ).trim();
       if (!isNaN(limitAmount) && limitAmount !== "") {
         let text;
@@ -305,13 +316,19 @@ Vue.createApp({
           this.patientRecords[patientAccount]["foodCheckboxChecked"] &&
           this.patientRecords[patientAccount]["waterCheckboxChecked"]
         ) {
-          text = `限制進食加喝水不超過${this.patientRecords[patientAccount]["limitAmount"]}公克`;
+          text = `限制進食加喝水不超過${
+            this.patientRecords[patientAccount]["limitAmount"]
+          }公克`;
         } else if (this.patientRecords[patientAccount]["foodCheckboxChecked"]) {
-          text = `限制進食不超過${this.patientRecords[patientAccount]["limitAmount"]}公克`;
+          text = `限制進食不超過${
+            this.patientRecords[patientAccount]["limitAmount"]
+          }公克`;
         } else if (
           this.patientRecords[patientAccount]["waterCheckboxChecked"]
         ) {
-          text = `限制喝水不超過${this.patientRecords[patientAccount]["limitAmount"]}公克`;
+          text = `限制喝水不超過${
+            this.patientRecords[patientAccount]["limitAmount"]
+          }公克`;
         }
         this.restrictionText[patientAccount] = text;
       } else {
@@ -320,7 +337,7 @@ Vue.createApp({
     },
     toggleRestrictionEdit(patientAccount) {
       const limitAmount = String(
-        this.patientRecords[patientAccount]["limitAmount"]
+        this.patientRecords[patientAccount]["limitAmount"],
       ).trim();
       if (this.patientRecords[patientAccount]["isEditing"]) {
         if (
@@ -342,8 +359,8 @@ Vue.createApp({
           return;
         }
       }
-      this.patientRecords[patientAccount]["isEditing"] =
-        !this.patientRecords[patientAccount]["isEditing"];
+      this.patientRecords[patientAccount]["isEditing"] = !this
+        .patientRecords[patientAccount]["isEditing"];
       if (!this.patientRecords[patientAccount]["isEditing"]) {
         if (limitAmount !== "") {
           this.updateRestrictionText(patientAccount);
@@ -402,8 +419,7 @@ Vue.createApp({
       let exceed = false;
       const patientRecord = this.patientRecords[patientAccount];
       if (patientRecord["foodCheckboxChecked"]) {
-        exceed =
-          patientRecord[this.currentDateYY_MM_DD]["foodSum"] +
+        exceed = patientRecord[this.currentDateYY_MM_DD]["foodSum"] +
             (patientRecord["waterCheckboxChecked"]
               ? patientRecord[this.currentDateYY_MM_DD]["waterSum"]
               : 0) >
@@ -415,8 +431,7 @@ Vue.createApp({
       let exceed = false;
       const patientRecord = this.patientRecords[patientAccount];
       if (patientRecord["waterCheckboxChecked"]) {
-        exceed =
-          patientRecord[this.currentDateYY_MM_DD]["waterSum"] +
+        exceed = patientRecord[this.currentDateYY_MM_DD]["waterSum"] +
             (patientRecord["foodCheckboxChecked"]
               ? patientRecord[this.currentDateYY_MM_DD]["foodSum"]
               : 0) >
@@ -441,13 +456,13 @@ Vue.createApp({
         "請確認是否移除這筆資料:",
         `床號: ${patientAccount}`,
         `日期: ${date.replaceAll("_", "/")}`,
-        `時間: ${record['time']}`,
-        `進食: ${record['food']}`,
-        `喝水: ${record['water']}`,
-        `排尿: ${record['urination']}`,
-        `排便: ${record['defecation']}`
+        `時間: ${record["time"]}`,
+        `進食: ${record["food"]}`,
+        `喝水: ${record["water"]}`,
+        `排尿: ${record["urination"]}`,
+        `排便: ${record["defecation"]}`,
       ];
-      const confirmMessage = confirmMessageLines.join('\n');
+      const confirmMessage = confirmMessageLines.join("\n");
       if (confirm(confirmMessage)) {
         this.removingRecord = true;
 
@@ -498,15 +513,21 @@ Vue.createApp({
     setInterval(() => {
       const d = new Date();
       const dayOfWeek = ["日", "一", "二", "三", "四", "五", "六"];
-      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${(
-        "0" + d.getDate()
-      ).slice(-2)} (${dayOfWeek[d.getDay()]})`;
-      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${(
-        "0" + d.getMinutes()
-      ).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
-      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${(
-        "0" + d.getDate()
-      ).slice(-2)}`;
+      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${
+        (
+          "0" + d.getDate()
+        ).slice(-2)
+      } (${dayOfWeek[d.getDay()]})`;
+      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${
+        (
+          "0" + d.getMinutes()
+        ).slice(-2)
+      }:${("0" + d.getSeconds()).slice(-2)}`;
+      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${
+        (
+          "0" + d.getDate()
+        ).slice(-2)
+      }`;
     }, 1000);
 
     setInterval(async () => {
@@ -524,7 +545,8 @@ Vue.createApp({
         if (
           !this.confirming &&
           Object.prototype.hasOwnProperty.call(fetchedData, "message") &&
-          fetchedData.message === this.events.messages.FETCH_MONITORING_PATIENTS_SUCCESS
+          fetchedData.message ===
+            this.events.messages.FETCH_MONITORING_PATIENTS_SUCCESS
         ) {
           this.processFetchedData(fetchedData);
           this.searchPatient();
