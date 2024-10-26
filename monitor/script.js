@@ -35,7 +35,7 @@ Vue.createApp({
     };
   },
   created() {
-    this.apiUrl = "https://lifeadventurer.tfcis.org/";
+    this.apiUrl = "https://lifeadventurer.tfcis.org/pior/api/";
     this.dietaryItems = ["food", "water", "urination", "defecation"];
     this.keysToFilter = {
       isEditing: false,

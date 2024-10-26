@@ -1,6 +1,6 @@
 API_PORT = 8000
 FRONTEND_PORT = 5500
-URL = "https://lifeadventurer.tfcis.org/"
+URL = "https://lifeadventurer.tfcis.org/pior/api/"
 
 # Paths
 DATA_JSON_PATH = "./data.json"  # Patient data
