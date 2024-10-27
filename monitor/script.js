@@ -479,13 +479,13 @@ Vue.createApp({
       this.confirming = false;
     },
     scrollToTop() {
-      window.scrollTo({
+      globalThis.scrollTo({
         top: 0,
         behavior: "smooth",
       });
     },
     handleScroll() {
-      if (window.scrollY > 20) {
+      if (globalThis.scrollY > 20) {
         this.showScrollButton = true;
       } else {
         this.showScrollButton = false;
@@ -555,10 +555,10 @@ Vue.createApp({
       await this.fetchUnmonitoredPatients();
     }, 3000);
 
-    window.addEventListener("scroll", this.handleScroll);
+    globalThis.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
+    globalThis.removeEventListener("scroll", this.handleScroll);
   },
   computed: {
     reversedPatientRecords() {

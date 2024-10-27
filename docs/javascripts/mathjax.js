@@ -1,4 +1,4 @@
-window.MathJax = {
+globalThis.MathJax = {
   tex: {
     inlineMath: [["\\(", "\\)"]],
     displayMath: [["\\[", "\\]"]],
