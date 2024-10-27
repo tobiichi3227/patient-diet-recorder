@@ -52,6 +52,6 @@ provided below:
 - Replace `{Translate '...' here}` with the corresponding translation in the new
   language.
 - Add the language code and name to
-[supported_languages.json](https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/patient/supported_languages.json)
+  [supported_languages.json](https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/patient/supported_languages.json)
 - Add the JSON format you filled in above to the end of
   [lang_texts.json](https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/patient/lang_texts.json)
