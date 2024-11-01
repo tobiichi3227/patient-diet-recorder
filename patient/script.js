@@ -46,19 +46,6 @@ Vue.createApp({
     this.loadSelectedLanguage();
   },
   methods: {
-    initRecords(currentDate) {
-      const num = currentDate.split("_");
-      this.records[currentDate] = {
-        data: [],
-        count: 0,
-        recordDate: `${num[1]}/${num[2]}`,
-        foodSum: 0,
-        waterSum: 0,
-        urinationSum: 0,
-        defecationSum: 0,
-        weight: "NaN",
-      };
-    },
     async loadAPIEvents() {
       const response = await fetch("./events.json");
       this.events = await response.json();
@@ -83,6 +70,19 @@ Vue.createApp({
       } else {
         localStorage.setItem("selectedLanguageCode", this.selectedLanguage);
       }
+    },
+    initRecords(currentDate) {
+      const num = currentDate.split("_");
+      this.records[currentDate] = {
+        data: [],
+        count: 0,
+        recordDate: `${num[1]}/${num[2]}`,
+        foodSum: 0,
+        waterSum: 0,
+        urinationSum: 0,
+        defecationSum: 0,
+        weight: "NaN",
+      };
     },
     async fetchRecords() {
       const fetchUrl = this.apiUrl;
