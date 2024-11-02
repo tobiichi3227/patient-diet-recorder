@@ -35,7 +35,7 @@ Vue.createApp({
     };
   },
   created() {
-    this.fetchApiUrl();
+    this.fetchConfig();
     this.dietaryItems = ["food", "water", "urination", "defecation"];
     this.keysToFilter = {
       isEditing: false,
@@ -49,13 +49,14 @@ Vue.createApp({
     this.confirming = false;
   },
   methods: {
-    async fetchApiUrl() {
+    async fetchConfig() {
       try {
         const response = await fetch("./config.json");
         const config = await response.json();
         this.apiUrl = config.apiUrl;
+        this.webUrl = config.webUrl;
       } catch (error) {
-        console.error("Failed to load API URL", error);
+        console.error("Failed to load config", error);
       }
     },
     async loadAPIEvents() {
@@ -304,7 +305,7 @@ Vue.createApp({
 
       const qrCodeContainer = document.getElementById("qrCodeContainer");
       const qrData =
-        `https://lifeadventurer.github.io/patient-intake-output-recorder/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
+        `${this.webUrl}/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
       const qrCode = qrcode(0, "H");
       qrCode.addData(qrData);
       qrCode.make();
