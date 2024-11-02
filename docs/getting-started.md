@@ -28,16 +28,45 @@ reproducible builds.
 
 ## Configuration
 
-### Set your token
+- **Backend**: Navigate to the `config.json` file located in the `backend`
+  directory. Update the file by replacing `{your_token_here}` and
+  `{your_api_url_here}` with your actual token and API URl in the following
+  format:
+
+  **Example `backend/config.json` content:**
+  ```json
+  {
+    "token": "{your_token_here}",
+    "api_url": "{your_api_url_here}"
+  }
+  ```
+
+- **Frontend (Patient)**: Navigate to the `config.json` file located in the
+  `patient/` directory. Update the file by replacing `{your_api_url_here}` with
+  your actual API URL in the following format:
+
+  **Example `patient/config.json` content:**
+  ```json
+  {
+    "apiUrl": "{your_api_url_here}"
+  }
+  ```
+
+- **Frontend (Monitor)**: Navigate to the `config.json` file located in the
+  `monitor/` directory. Update the file by replacing `{your_api_url_here}` and
+  `{your_web_url_here}` with your actual API URL and web URL in the following
+  format:
+
+  **Example `monitor/config.json` content:**
+  ```json
+  {
+    "apiUrl": "{your_api_url_here}",
+    "webUrl": "{your_web_url_here}"
+  }
+  ```
 
 - Open `config.json` located in the `backend` directory and replace
   `{your_token_here}` with your actual token. The format should resemble:
-
-  ```json
-  {
-    "token": "{your_token_here}"
-  }
-  ```
 
 ## Running the server
 
