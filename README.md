@@ -1,8 +1,5 @@
 # Patient Intake/Output (I/O) Recorder
 
-[Patient Side](https://lifeadventurer.github.io/patient-intake-output-recorder/patient/)
-[Monitor Side](https://lifeadventurer.github.io/patient-intake-output-recorder/monitor/)
-
 This project is a simple tool for recording and tracking essential health
 parameters of patients. It provides a user-friendly interface for healthcare
 professionals to log various health metrics, including food intake, water
@@ -22,15 +19,43 @@ health and preventing complications.
 
 ## Getting Started
 
-1. Set your token: First, navigate to the `config.json` file located in the
-   `backend` directory. Update the file by replacing `{your_token_here}` with
-   your actual token in the following format:
+1. Set your configuration:
+   - **Backend**: Navigate to the `config.json` file located in the `backend`
+     directory. Update the file by replacing `{your_token_here}` and
+     `{your_api_url_here}` with your actual token and API URl in the following
+     format:
 
-   ```json
-   {
-     "token": "{your_token_here}"
-   }
-   ```
+     **Example `backend/config.json` content:**
+     ```json
+     {
+       "token": "{your_token_here}",
+       "api_url": "{your_api_url_here}"
+     }
+     ```
+
+   - **Frontend (Patient)**: Navigate to the `config.json` file located in the
+     `patient/` directory. Update the file by replacing `{your_api_url_here}`
+     with your actual API URL in the following format:
+
+     **Example `patient/config.json` content:**
+     ```json
+     {
+       "apiUrl": "{your_api_url_here}"
+     }
+     ```
+
+   - **Frontend (Monitor)**: Navigate to the `config.json` file located in the
+     `monitor/` directory. Update the file by replacing `{your_api_url_here}`
+     and `{your_web_url_here}` with your actual API URL and web URL in the
+     following format:
+
+     **Example `monitor/config.json` content:**
+     ```json
+     {
+       "apiUrl": "{your_api_url_here}",
+       "webUrl": "{your_web_url_here}"
+     }
+     ```
 
 2. Run your server: Open your terminal and execute the following commands:
 
