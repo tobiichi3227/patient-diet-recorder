@@ -1,7 +1,7 @@
 import json
 
 import requests
-from constants import SIGN_UP_MONITOR, URL
+from constants import API_URL, SIGN_UP_MONITOR
 
 with open("./config.json") as f:
     token = json.load(f)["token"]
@@ -20,7 +20,7 @@ payload = {
 headers = {"Accept": "application/json", "Content-Type": "application/json"}
 
 try:
-    response = requests.post(URL, json=payload, headers=headers)
+    response = requests.post(API_URL, json=payload, headers=headers)
     response.raise_for_status()
     response = response.json()
     print(response["message"])

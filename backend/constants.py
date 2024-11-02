@@ -1,6 +1,15 @@
+import json
+
+with open("./config.json") as file:
+    config = json.load(file)
+
+API_URL = config.get("api_url", "")
+
+if not API_URL:
+    raise ValueError("api_url is not set in the config file")
+
 API_PORT = 8000
 FRONTEND_PORT = 5500
-URL = "https://lifeadventurer.tfcis.org/pior/api/"
 
 # Paths
 DATA_JSON_PATH = "./data.json"  # Patient data

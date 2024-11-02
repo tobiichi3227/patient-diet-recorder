@@ -38,7 +38,7 @@ Vue.createApp({
     };
   },
   async created() {
-    this.apiUrl = "https://lifeadventurer.tfcis.org/pior/api/";
+    this.fetchApiUrl();
     this.dietaryItems = ["food", "water", "urination", "defecation"];
     this.confirming = false;
     await this.loadSupportedLanguages();
@@ -46,6 +46,15 @@ Vue.createApp({
     this.loadSelectedLanguage();
   },
   methods: {
+    async fetchApiUrl() {
+      try {
+        const response = await fetch("./config.json");
+        const config = await response.json();
+        this.apiUrl = config.apiUrl;
+      } catch (error) {
+        console.error("Failed to load API URL", error);
+      }
+    },
     async loadAPIEvents() {
       const response = await fetch("./events.json");
       this.events = await response.json();
