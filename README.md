@@ -1,4 +1,14 @@
-# Patient Intake/Output (I/O) Recorder
+<h1 align="center">Patient Intake/Output (I/O) Recorder</h1>
+
+<hr>
+
+<h4 align="center">
+  <a href="https://lifeadventurer.github.io/patient-intake-output-recorder/getting-started/#installation">Install</a>
+  ·
+  <a href="https://lifeadventurer.github.io/patient-intake-output-recorder/getting-started/#configuration">Configure</a>
+  ·
+  <a href="https://lifeadventurer.github.io/patient-intake-output-recorder">Docs</a>
+</h4>
 
 This project is a simple tool for recording and tracking essential health
 parameters of patients. It provides a user-friendly interface for healthcare
