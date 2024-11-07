@@ -234,50 +234,52 @@
                     <template
                       v-if="patientRecords[patientAccount][currentDateYY_MM_DD]"
                     >
-                      <table class="table table-striped table-bordered">
-                        <thead>
-                          <tr class="text-center">
-                            <th scope="col">
-                              {{
-                              patientRecords[patientAccount][currentDateYY_MM_DD]['recordDate']
-                              }}
-                            </th>
-                            <th scope="col">進食</th>
-                            <th scope="col">喝水</th>
-                            <th scope="col">排尿</th>
-                            <th scope="col">排便</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="text-center fw-bold">
-                            <td>總和</td>
-                            <td
-                              :style="{ color: getFoodSumColor(patientAccount) }"
-                            >
-                              {{
-                              patientRecords[patientAccount][currentDateYY_MM_DD]['foodSum']
-                              }}g
-                            </td>
-                            <td
-                              :style="{ color: getWaterSumColor(patientAccount) }"
-                            >
-                              {{
-                              patientRecords[patientAccount][currentDateYY_MM_DD]['waterSum']
-                              }}ml
-                            </td>
-                            <td>
-                              {{
-                              patientRecords[patientAccount][currentDateYY_MM_DD]['urinationSum']
-                              }}ml
-                            </td>
-                            <td>
-                              {{
-                              patientRecords[patientAccount][currentDateYY_MM_DD]['defecationSum']
-                              }}次
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                          <thead>
+                            <tr class="text-center">
+                              <th scope="col">
+                                {{
+                                patientRecords[patientAccount][currentDateYY_MM_DD]['recordDate']
+                                }}
+                              </th>
+                              <th scope="col">進食</th>
+                              <th scope="col">喝水</th>
+                              <th scope="col">排尿</th>
+                              <th scope="col">排便</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="text-center fw-bold">
+                              <td>總和</td>
+                              <td
+                                :style="{ color: getFoodSumColor(patientAccount) }"
+                              >
+                                {{
+                                patientRecords[patientAccount][currentDateYY_MM_DD]['foodSum']
+                                }}g
+                              </td>
+                              <td
+                                :style="{ color: getWaterSumColor(patientAccount) }"
+                              >
+                                {{
+                                patientRecords[patientAccount][currentDateYY_MM_DD]['waterSum']
+                                }}ml
+                              </td>
+                              <td>
+                                {{
+                                patientRecords[patientAccount][currentDateYY_MM_DD]['urinationSum']
+                                }}ml
+                              </td>
+                              <td>
+                                {{
+                                patientRecords[patientAccount][currentDateYY_MM_DD]['defecationSum']
+                                }}次
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </template>
                     <template v-else>
                       <h4 class="text-center">今日尚無紀錄</h4>
@@ -375,80 +377,83 @@
                                         class="accordion-body"
                                         style="padding: 8px 10px"
                                       >
-                                        <table
-                                          class="table table-striped table-bordered"
-                                          style="font-size: 18px"
-                                        >
-                                          <thead>
-                                            <tr class="text-center">
-                                              <th scope="col">時間</th>
-                                              <th scope="col">進食</th>
-                                              <th scope="col">喝水</th>
-                                              <th scope="col">排尿</th>
-                                              <th scope="col">排便</th>
-                                              <th scope="col"></th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr
-                                              v-for="(data, index3) in dailyRecord['data']"
-                                              :key="index3"
-                                            >
-                                              <td
-                                                v-for="(content, columnIndex) in data"
-                                                class="text-center"
-                                                :key="columnIndex"
+                                        <div class="table-responsive">
+                                          <table
+                                            class="table table-striped table-bordered"
+                                            style="font-size: 18px"
+                                          >
+                                            <thead>
+                                              <tr class="text-center">
+                                                <th scope="col">時間</th>
+                                                <th scope="col">進食</th>
+                                                <th scope="col">喝水</th>
+                                                <th scope="col">排尿</th>
+                                                <th scope="col">排便</th>
+                                                <th scope="col"></th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr
+                                                v-for="(data, index3) in dailyRecord['data']"
+                                                :key="index3"
                                               >
-                                                <input
-                                                  v-if="columnIndex !== 'time' && editingRecordPatientAccount === patientAccount && editingRecordIndex === index3"
-                                                  class="form-control"
-                                                  type="number"
-                                                  v-model="dailyRecord['data'][index3][columnIndex]"
-                                                />
-                                                <span v-else>
-                                                  {{ content }}
-                                                </span>
-                                              </td>
-                                              <td
-                                                class="justify-content-center align-items-center"
-                                                style="text-align: center; padding: 8px"
-                                              >
-                                                <i
-                                                  @click="toggleRecordEdit($event.target, patientAccount)"
-                                                  :id="`${index2}-${index3}`"
-                                                  class="fa-solid me-1"
-                                                  :class="editingRecordPatientAccount ? 'fa-check' : 'fa-pen-to-square'"
+                                                <td
+                                                  v-for="(content, columnIndex) in data"
+                                                  class="text-center"
+                                                  :key="columnIndex"
                                                 >
-                                                </i>
-                                                <i
-                                                  @click="removeRecord($event.target, patientAccount)"
-                                                  :id="`${index2}-${index3}`"
-                                                  class="fa-solid"
-                                                  :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
+                                                  <input
+                                                    v-if="columnIndex !== 'time' && editingRecordPatientAccount === patientAccount && editingRecordIndex === index3"
+                                                    class="form-control"
+                                                    type="number"
+                                                    v-model="dailyRecord['data'][index3][columnIndex]"
+                                                  />
+                                                  <span v-else>
+                                                    {{ content }}
+                                                  </span>
+                                                </td>
+                                                <td
+                                                  class="justify-content-center align-items-center"
+                                                  style="text-align: center; padding: 8px"
                                                 >
-                                                </i>
-                                              </td>
-                                            </tr>
-                                            <tr class="text-center fw-bold">
-                                              <td>總和</td>
-                                              <td>
-                                                {{ dailyRecord['foodSum'] }}
-                                              </td>
-                                              <td>
-                                                {{ dailyRecord['waterSum'] }}
-                                              </td>
-                                              <td>
-                                                {{ dailyRecord['urinationSum']
-                                                }}
-                                              </td>
-                                              <td>
-                                                {{ dailyRecord['defecationSum']
-                                                }}
-                                              </td>
-                                              <td></td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
+                                                  <i
+                                                    @click="toggleRecordEdit($event.target, patientAccount)"
+                                                    :id="`${index2}-${index3}`"
+                                                    class="fa-solid me-1"
+                                                    :class="editingRecordPatientAccount ? 'fa-check' : 'fa-pen-to-square'"
+                                                  >
+                                                  </i>
+                                                  <i
+                                                    @click="removeRecord($event.target, patientAccount)"
+                                                    :id="`${index2}-${index3}`"
+                                                    class="fa-solid"
+                                                    :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
+                                                  >
+                                                  </i>
+                                                </td>
+                                              </tr>
+                                              <tr class="text-center fw-bold">
+                                                <td>總和</td>
+                                                <td>
+                                                  {{ dailyRecord['foodSum'] }}
+                                                </td>
+                                                <td>
+                                                  {{ dailyRecord['waterSum'] }}
+                                                </td>
+                                                <td>
+                                                  {{ dailyRecord['urinationSum']
+                                                  }}
+                                                </td>
+                                                <td>
+                                                  {{
+                                                  dailyRecord['defecationSum']
+                                                  }}
+                                                </td>
+                                                <td></td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
