@@ -55,7 +55,7 @@
                 type="button"
               >
                 <i
-                  class="fas"
+                  class="fa-solid"
                   :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
                   aria-hidden="true"
                 ></i>
@@ -108,7 +108,7 @@
                   placeholder="查詢病床號..."
                 />
                 <button type="submit" class="btn btn-light border">
-                  <i class="fas fa-search"></i>
+                  <i class="fa-solid fa-search"></i>
                 </button>
               </div>
             </div>
@@ -224,9 +224,9 @@
                       >
                         <i
                           v-if="patientRecords[patientAccount]['isEditing']"
-                          class="fas fa-check"
+                          class="fa-solid fa-check"
                         ></i>
-                        <i v-else class="fas fa-pencil-alt"></i>
+                        <i v-else class="fa-solid fa-pencil-alt"></i>
                       </button>
                     </div>
                   </div>
@@ -416,14 +416,14 @@
                                                 <i
                                                   @click="toggleRecordEdit($event.target, patientAccount)"
                                                   :id="`${index2}-${index3}`"
-                                                  class="fas me-1"
+                                                  class="fa-solid me-1"
                                                   :class="editingRecordPatientAccount ? 'fa-check' : 'fa-pen-to-square'"
                                                 >
                                                 </i>
                                                 <i
                                                   @click="removeRecord($event.target, patientAccount)"
                                                   :id="`${index2}-${index3}`"
-                                                  class="fas"
+                                                  class="fa-solid"
                                                   :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
                                                 >
                                                 </i>
@@ -486,7 +486,7 @@
           @click="scrollToTop"
           v-show="showScrollButton"
         >
-          <i class="fas fa-arrow-up"></i>
+          <i class="fa-solid fa-arrow-up"></i>
         </button>
 
         <!-- Sign up Modal -->

@@ -55,7 +55,7 @@
                 type="button"
               >
                 <i
-                  class="fas"
+                  class="fa-solid"
                   :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
                   aria-hidden="true"
                 ></i>
@@ -66,7 +66,7 @@
         <div class="row mt-3">
           <div class="col-md-2 offset-md-5 col-7 offset-1">
             <div class="input-group">
-              <span class="input-group-text"><i class="fas fa-globe"></i></span>
+              <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
               <select
                 v-model="selectedLanguage"
                 @change="changeLanguage($event.target.value)"
@@ -137,7 +137,7 @@
           role="alert"
           style="font-size: 24px"
         >
-          <i class="fas fa-exclamation-triangle"></i>
+          <i class="fa-solid fa-exclamation-triangle"></i>
           {{ restrictionText }}
         </div>
 
@@ -153,7 +153,7 @@
                     <h3>{{ curLangText.food_intake }}</h3>
                   </div>
                   <div class="col-4">
-                    <i class="fas fa-utensils" style="font-size: 24px"></i>
+                    <i class="fa-solid fa-utensils" style="font-size: 24px"></i>
                   </div>
                 </div>
 
@@ -199,7 +199,7 @@
                     <h3>{{ curLangText.water_consumption }}</h3>
                   </div>
                   <div class="col-4">
-                    <i class="fas fa-glass-water" style="font-size: 24px"></i>
+                    <i class="fa-solid fa-glass-water" style="font-size: 24px"></i>
                   </div>
                 </div>
 
@@ -245,7 +245,7 @@
                     <h3>{{ curLangText.urination }}</h3>
                   </div>
                   <div class="col-4">
-                    <i class="fas fa-toilet" style="font-size: 24px"></i>
+                    <i class="fa-solid fa-toilet" style="font-size: 24px"></i>
                   </div>
                 </div>
 
@@ -292,7 +292,7 @@
                   </div>
                   <div class="col-4">
                     <i
-                      class="fas fa-restroom"
+                      class="fa-solid fa-restroom"
                       style="font-size: 24px"
                     >
                     </i>
@@ -333,7 +333,7 @@
                     <h3>{{ curLangText.weight }}</h3>
                   </div>
                   <div class="col-2">
-                    <i class="fas fa-weight-scale" style="font-size: 30px"></i>
+                    <i class="fa-solid fa-weight-scale" style="font-size: 30px"></i>
                   </div>
                   <div class="col-6">
                     <div class="col">
@@ -367,7 +367,7 @@
               role="alert"
               style="font-size: 24px"
             >
-              <i class="fas fa-check-circle"></i>
+              <i class="fa-solid fa-check-circle"></i>
               {{ curLangText.data_added_successfully }}
               <button
                 type="button"
@@ -502,7 +502,7 @@
                               <i
                                 @click="removeRecord($event.target)"
                                 :id="`${index}-${index2}`"
-                                class="fas"
+                                class="fa-solid"
                                 :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
                               >
                               </i>
@@ -530,7 +530,7 @@
         <div class="row mt-3">
           <div class="col-md-3 offset-md-5 col-8 offset-2">
             <div class="input-group">
-              <span class="input-group-text"><i class="fas fa-globe"></i></span>
+              <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
               <select
                 v-model="selectedLanguage"
                 @change="changeLanguage($event.target.value)"
@@ -564,7 +564,7 @@
           @click="scrollToTop"
           v-show="showScrollButton"
         >
-          <i class="fas fa-arrow-up"></i>
+          <i class="fa-solid fa-arrow-up"></i>
         </button>
       </template>
     </div>
