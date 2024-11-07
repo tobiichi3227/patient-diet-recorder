@@ -15,10 +15,6 @@
       referrerpolicy="no-referrer"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-      rel="stylesheet"
-    />
-    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
       integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
@@ -417,24 +413,20 @@
                                                 class="justify-content-center align-items-center"
                                                 style="text-align: center; padding: 8px"
                                               >
-                                                <span
+                                                <i
                                                   @click="toggleRecordEdit($event.target, patientAccount)"
                                                   :id="`${index2}-${index3}`"
-                                                  class="material-symbols-outlined"
-                                                  style="display: inline-block; margin-left: 0px"
+                                                  class="fas me-1"
+                                                  :class="editingRecordPatientAccount ? 'fa-check' : 'fa-pen-to-square'"
                                                 >
-                                                  {{ editingRecordPatientAccount
-                                                  ? 'check' : 'edit' }}
-                                                </span>
-                                                <span
+                                                </i>
+                                                <i
                                                   @click="removeRecord($event.target, patientAccount)"
                                                   :id="`${index2}-${index3}`"
-                                                  class="material-symbols-outlined"
-                                                  style="display: inline-block; margin-left: 4px"
+                                                  class="fas"
+                                                  :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
                                                 >
-                                                  {{ removingRecord ?
-                                                  'hourglass_top' : 'delete' }}
-                                                </span>
+                                                </i>
                                               </td>
                                             </tr>
                                             <tr class="text-center fw-bold">

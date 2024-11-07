@@ -15,10 +15,6 @@
       referrerpolicy="no-referrer"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-      rel="stylesheet"
-    />
-    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
       integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
@@ -157,12 +153,7 @@
                     <h3>{{ curLangText.food_intake }}</h3>
                   </div>
                   <div class="col-4">
-                    <span
-                      class="material-symbols-outlined"
-                      style="font-size: 30px"
-                    >
-                      restaurant
-                    </span>
+                    <i class="fas fa-utensils" style="font-size: 24px"></i>
                   </div>
                 </div>
 
@@ -208,12 +199,7 @@
                     <h3>{{ curLangText.water_consumption }}</h3>
                   </div>
                   <div class="col-4">
-                    <span
-                      class="material-symbols-outlined"
-                      style="font-size: 30px"
-                    >
-                      water_medium
-                    </span>
+                    <i class="fas fa-glass-water" style="font-size: 24px"></i>
                   </div>
                 </div>
 
@@ -259,12 +245,7 @@
                     <h3>{{ curLangText.urination }}</h3>
                   </div>
                   <div class="col-4">
-                    <span
-                      class="material-symbols-outlined"
-                      style="font-size: 30px"
-                    >
-                      accessible
-                    </span>
+                    <i class="fas fa-toilet" style="font-size: 24px"></i>
                   </div>
                 </div>
 
@@ -310,12 +291,11 @@
                     <h3>{{ curLangText.defecation }}</h3>
                   </div>
                   <div class="col-4">
-                    <span
-                      class="material-symbols-outlined"
-                      style="font-size: 30px"
+                    <i
+                      class="fas fa-restroom"
+                      style="font-size: 24px"
                     >
-                      wc
-                    </span>
+                    </i>
                   </div>
                 </div>
 
@@ -353,12 +333,7 @@
                     <h3>{{ curLangText.weight }}</h3>
                   </div>
                   <div class="col-2">
-                    <span
-                      class="material-symbols-outlined"
-                      style="font-size: 38px; margin-left: -80%"
-                    >
-                      monitor_weight
-                    </span>
+                    <i class="fas fa-weight-scale" style="font-size: 30px"></i>
                   </div>
                   <div class="col-6">
                     <div class="col">
@@ -524,15 +499,13 @@
                               class="justify-content-center align-items-center"
                               style="text-align: center"
                             >
-                              <span
+                              <i
                                 @click="removeRecord($event.target)"
                                 :id="`${index}-${index2}`"
-                                class="material-symbols-outlined"
-                                style="display: inline-block; margin-left: 0px"
+                                class="fas"
+                                :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
                               >
-                                {{ removingRecord ? 'hourglass_top' : 'delete'
-                                }}
-                              </span>
+                              </i>
                             </td>
                           </tr>
                           <tr class="text-center fw-bold">
