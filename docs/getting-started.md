@@ -23,50 +23,56 @@ pip. Open a terminal in the project directory and install the dependencies:
     pip install -r requirements.txt
     ```
 
-**Note**: Poetry is recommended as it simplifies version management and ensures
-reproducible builds.
+!!! Note
+
+    Poetry is recommended as it simplifies version management and ensures
+    reproducible builds.
 
 ## Configuration
 
-- **Backend**: Navigate to the `config.json` file located in the `backend`
-  directory. Update the file by replacing `{your_token_here}` and
-  `{your_api_url_here}` with your actual token and API URl in the following
-  format:
+### Backend
 
-  **Example `backend/config.json` content:**
-  ```json
-  {
-    "token": "{your_token_here}",
-    "api_url": "{your_api_url_here}"
-  }
-  ```
+Navigate to the `config.json` file located in the `backend` directory. Update
+the file by replacing `{your_token_here}` and `{your_api_url_here}` with your
+actual token and API URl in the following format:
 
-- **Frontend (Patient)**: Navigate to the `config.json` file located in the
-  `patient/` directory. Update the file by replacing `{your_api_url_here}` with
-  your actual API URL in the following format:
+**Example content:**
 
-  **Example `patient/config.json` content:**
-  ```json
-  {
-    "apiUrl": "{your_api_url_here}"
-  }
-  ```
+```json title="backend/config.json"
+{
+  "token": "{your_token_here}",
+  "api_url": "{your_api_url_here}"
+}
+```
 
-- **Frontend (Monitor)**: Navigate to the `config.json` file located in the
-  `monitor/` directory. Update the file by replacing `{your_api_url_here}` and
-  `{your_web_url_here}` with your actual API URL and web URL in the following
-  format:
+### Frontend (Patient)
 
-  **Example `monitor/config.json` content:**
-  ```json
-  {
-    "apiUrl": "{your_api_url_here}",
-    "webUrl": "{your_web_url_here}"
-  }
-  ```
+Navigate to the `config.json` file located in the `patient/` directory. Update
+the file by replacing `{your_api_url_here}` with your actual API URL in the
+following format:
 
-- Open `config.json` located in the `backend` directory and replace
-  `{your_token_here}` with your actual token. The format should resemble:
+**Example content:**
+
+```json title="patient/config.json"
+{
+  "apiUrl": "{your_api_url_here}"
+}
+```
+
+### Frontend (Monitor)
+
+Navigate to the `config.json` file located in the `monitor/` directory. Update
+the file by replacing `{your_api_url_here}` and `{your_web_url_here}` with
+your actual API URL and web URL in the following format:
+
+**Example content:**
+
+```json title="monitor/config.json"
+{
+"apiUrl": "{your_api_url_here}",
+"webUrl": "{your_web_url_here}"
+}
+```
 
 ## Running the server
 
