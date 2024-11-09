@@ -8,7 +8,6 @@ Vue.createApp({
       currentDate: "",
       currentTime: "",
       currentDateYY_MM_DD: "",
-      dietaryItems: ["food", "water", "urination", "defecation"],
       // Patient
       patientRecords: {},
       patientAccounts: [], // monitoredPatients
@@ -398,13 +397,13 @@ Vue.createApp({
       if (this.editingRecordIndex === -1) {
         this.editingRecordIndex = parseInt(recordIndex);
         this.editingRecordPatientAccount = patientAccount;
-        for (dietaryItem of this.dietaryItems) {
+        for (const dietaryItem of this.dietaryItems) {
           this.tempPatientRecord[dietaryItem] = record[dietaryItem];
         }
       } else {
         this.editingRecordIndex = -1;
         this.editingRecordPatientAccount = "";
-        for (dietaryItem of this.dietaryItems) {
+        for (const dietaryItem of this.dietaryItems) {
           if (record[dietaryItem] === "") {
             record[dietaryItem] = 0;
           }
@@ -477,7 +476,7 @@ Vue.createApp({
         this.removingRecord = true;
 
         this.patientRecords[patientAccount][date]["count"] -= 1;
-        for (dietaryItem of this.dietaryItems) {
+        for (const dietaryItem of this.dietaryItems) {
           this.patientRecords[patientAccount][date][`${dietaryItem}Sum`] -=
             record[dietaryItem];
         }

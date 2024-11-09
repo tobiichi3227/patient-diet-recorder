@@ -19,7 +19,6 @@ Vue.createApp({
         { value: 350, label: "350" },
         { value: 400, label: "400" },
       ],
-      dietaryItems: ["food", "water", "urination", "defecation"],
       inputFood: 0,
       inputWater: 0,
       inputUrination: 0,
@@ -299,7 +298,7 @@ Vue.createApp({
         const lastRecord = this.records[currentDate]["data"].pop();
         if (lastRecord !== undefined) {
           if (lastRecord["time"] === currentData["time"]) {
-            for (dietaryItem of this.dietaryItems) {
+            for (const dietaryItem of this.dietaryItems) {
               lastRecord[dietaryItem] += currentData[dietaryItem];
             }
             this.records[currentDate]["data"].push(lastRecord);
@@ -374,7 +373,7 @@ Vue.createApp({
 
         const record = this.records[date]["data"][index];
         this.records[date]["count"] -= 1;
-        for (dietaryItem of this.dietaryItems) {
+        for (const dietaryItem of this.dietaryItems) {
           this.records[date][`${dietaryItem}Sum`] -= record[dietaryItem];
         }
         this.records[date]["data"].splice(index, 1);
