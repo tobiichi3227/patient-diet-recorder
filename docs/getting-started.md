@@ -32,9 +32,9 @@ pip. Open a terminal in the project directory and install the dependencies:
 
 ### Backend
 
-Navigate to the `config.json` file located in the `backend` directory. Update
-the file by replacing `{your_token_here}` and `{your_api_url_here}` with your
-actual token and API URl in the following format:
+1. In the `backend` directory, create a new `config.json` file.
+2. Replace `{your_token_here}` and `{your_api_url_here}` with your actual token
+   and API URL.
 
 **Example content:**
 
@@ -47,9 +47,8 @@ actual token and API URl in the following format:
 
 ### Frontend (Patient)
 
-Navigate to the `config.json` file located in the `patient/` directory. Update
-the file by replacing `{your_api_url_here}` with your actual API URL in the
-following format:
+1. In the `patient` directory, create a new `config.json` file.
+2. Replace `{your_api_url_here}` with your actual API URL.
 
 **Example content:**
 
@@ -61,16 +60,16 @@ following format:
 
 ### Frontend (Monitor)
 
-Navigate to the `config.json` file located in the `monitor/` directory. Update
-the file by replacing `{your_api_url_here}` and `{your_web_url_here}` with
-your actual API URL and web URL in the following format:
+1. In the `monitor` directory, create a new `config.json` file.
+2. Replace `{your_api_url_here}` and `{your_web_url_here}` with your actual API
+   URL and web URL.
 
 **Example content:**
 
 ```json title="monitor/config.json"
 {
-"apiUrl": "{your_api_url_here}",
-"webUrl": "{your_web_url_here}"
+  "apiUrl": "{your_api_url_here}",
+  "webUrl": "{your_web_url_here}"
 }
 ```
 
