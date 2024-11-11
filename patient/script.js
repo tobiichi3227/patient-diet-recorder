@@ -145,7 +145,7 @@ Vue.createApp({
     },
     async authenticate() {
       const fetchedData = await this.fetchRecords();
-      if (Object.prototype.hasOwnProperty.call(fetchedData, "message")) {
+      if (Object.hasOwn(fetchedData, "message")) {
         switch (fetchedData.message) {
           case this.events.messages.ACCT_NOT_EXIST:
             alert(this.curLangText.nonexistent_account);
@@ -439,7 +439,7 @@ Vue.createApp({
         const fetchedData = await this.fetchRecords();
         if (
           !this.confirming &&
-          Object.prototype.hasOwnProperty.call(fetchedData, "message") &&
+          Object.hasOwn(fetchedData, "message") &&
           fetchedData.message === this.events.messages.FETCH_RECORD_SUCCESS
         ) {
           this.records = fetchedData["account_records"];

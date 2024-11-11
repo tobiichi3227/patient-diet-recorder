@@ -202,7 +202,7 @@ Vue.createApp({
         account: this.account,
         password: this.password,
       });
-      if (Object.prototype.hasOwnProperty.call(fetchedData, "message")) {
+      if (Object.hasOwn(fetchedData, "message")) {
         switch (fetchedData.message) {
           case this.events.messages.ACCT_NOT_EXIST:
             alert("帳號不存在");
@@ -553,7 +553,7 @@ Vue.createApp({
         });
         if (
           !this.confirming &&
-          Object.prototype.hasOwnProperty.call(fetchedData, "message") &&
+          Object.hasOwn(fetchedData, "message") &&
           fetchedData.message ===
             this.events.messages.FETCH_MONITORING_PATIENTS_SUCCESS
         ) {
