@@ -41,6 +41,7 @@ Vue.createApp({
       signUpPatientSubmitted: false,
       signUpAlertMessage: "",
       signUpAlertClass: "",
+      stayOpenAfterSignup: false,
     };
   },
   created() {
@@ -264,9 +265,11 @@ Vue.createApp({
           this.signUpAlertClass = "alert-success";
 
           setTimeout(() => {
-            const signUpModal = document.getElementById("signUpModal");
-            const modalInstance = bootstrap.Modal.getInstance(signUpModal);
-            modalInstance.hide();
+            if (!this.stayOpenAfterSignup) {
+              const signUpModal = document.getElementById("signUpModal");
+              const modalInstance = bootstrap.Modal.getInstance(signUpModal);
+              modalInstance.hide();
+            }
             // Reset form and state
             this.signUpPatientAccount = "";
             this.signUpPatientPassword = "";
