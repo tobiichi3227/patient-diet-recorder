@@ -1,3 +1,13 @@
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
 Vue.createApp({
   data() {
     return {
@@ -266,7 +276,7 @@ Vue.createApp({
         }
       }
     },
-    searchPatient: _.debounce(function () {
+    searchPatient: debounce(function () {
       if (this.searchQuery.trim() === "") {
         this.filteredPatientAccounts = this.patientAccounts;
         return;
