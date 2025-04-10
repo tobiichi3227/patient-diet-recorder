@@ -12,6 +12,7 @@ from constants import (
     ADD_PATIENT_SUCCESS,
     AUTH_SUCCESS,
     CHANGE_PASSWORD,
+    CHANGE_USERNAME,
     CONFIG_JSON_PATH,
     DATA_JSON_PATH,
     DELETE_PATIENT,
@@ -317,6 +318,21 @@ async def handle_request(request: Request):
 
         db.change_account_password(
             post_request["account"], post_request["new_password"]
+        )
+        return {"message": ACCT_CHANGE_SUCCESS}
+
+    elif event == CHANGE_USERNAME:
+        if not has_parameters(
+            post_request, ["account", "password", "new_account"]
+        ):
+            return {"message": MISSING_PARAMETER}
+
+        err = db.authenticate(post_request["account"], post_request["password"])
+        if err != AUTH_SUCCESS:
+            return {"message": err}
+
+        db.change_account_username(
+            post_request["account"], post_request["new_account"]
         )
         return {"message": ACCT_CHANGE_SUCCESS}
 
