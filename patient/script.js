@@ -44,6 +44,28 @@ Vue.createApp({
     await this.loadLangTexts();
     this.loadSelectedLanguage();
   },
+  computed: {
+    curLangText() {
+      return this.curLangTexts[this.selectedLanguage];
+    },
+    reversedRecord() {
+      const reversedData = {};
+      const keysToFilter = [
+        "isEditing",
+        "limitAmount",
+        "foodCheckboxChecked",
+        "waterCheckboxChecked",
+      ];
+      Object.keys(this.records)
+        .reverse()
+        .forEach((key) => {
+          if (!keysToFilter.includes(key)) {
+            reversedData[key] = this.records[key];
+          }
+        });
+      return reversedData;
+    },
+  },
   methods: {
     async fetchApiUrl() {
       try {
@@ -452,27 +474,5 @@ Vue.createApp({
   },
   beforeUnmount() {
     globalThis.removeEventListener("scroll", this.handleScroll);
-  },
-  computed: {
-    curLangText() {
-      return this.curLangTexts[this.selectedLanguage];
-    },
-    reversedRecord() {
-      const reversedData = {};
-      const keysToFilter = [
-        "isEditing",
-        "limitAmount",
-        "foodCheckboxChecked",
-        "waterCheckboxChecked",
-      ];
-      Object.keys(this.records)
-        .reverse()
-        .forEach((key) => {
-          if (!keysToFilter.includes(key)) {
-            reversedData[key] = this.records[key];
-          }
-        });
-      return reversedData;
-    },
   },
 }).mount("#app");

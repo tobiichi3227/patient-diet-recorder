@@ -59,6 +59,31 @@ Vue.createApp({
     this.currentEditingPatient = "";
     this.confirming = false;
   },
+  computed: {
+    reversedPatientRecords() {
+      const reversedData = {};
+      Object.keys(this.patientRecords).forEach((patientAccount) => {
+        const reversedRecord = {};
+        Object.keys(this.patientRecords[patientAccount])
+          .reverse()
+          .forEach((key) => {
+            if (!(key in this.keysToFilter)) {
+              reversedRecord[key] = this.patientRecords[patientAccount][key];
+            }
+          });
+        reversedData[patientAccount] = reversedRecord;
+      });
+      return reversedData;
+    },
+  },
+  watch: {
+    stayOpenAfterSignup(val) {
+      localStorage.setItem("stayOpenAfterSignup", val);
+    },
+    autoAddToMonitor(val) {
+      localStorage.setItem("autoAddToMonitor", val);
+    },
+  },
   methods: {
     async fetchConfig() {
       try {
@@ -596,30 +621,5 @@ Vue.createApp({
   },
   beforeUnmount() {
     globalThis.removeEventListener("scroll", this.handleScroll);
-  },
-  computed: {
-    reversedPatientRecords() {
-      const reversedData = {};
-      Object.keys(this.patientRecords).forEach((patientAccount) => {
-        const reversedRecord = {};
-        Object.keys(this.patientRecords[patientAccount])
-          .reverse()
-          .forEach((key) => {
-            if (!(key in this.keysToFilter)) {
-              reversedRecord[key] = this.patientRecords[patientAccount][key];
-            }
-          });
-        reversedData[patientAccount] = reversedRecord;
-      });
-      return reversedData;
-    },
-  },
-  watch: {
-    stayOpenAfterSignup(val) {
-      localStorage.setItem("stayOpenAfterSignup", val);
-    },
-    autoAddToMonitor(val) {
-      localStorage.setItem("autoAddToMonitor", val);
-    },
   },
 }).mount("#app");
