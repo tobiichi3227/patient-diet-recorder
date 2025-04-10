@@ -42,6 +42,7 @@ Vue.createApp({
       signUpAlertMessage: "",
       signUpAlertClass: "",
       stayOpenAfterSignup: false,
+      autoAddToMonitor: true,
     };
   },
   created() {
@@ -151,12 +152,12 @@ Vue.createApp({
         console.error(response.message);
       }
     },
-    async addPatientToMonitor(index) {
+    async addPatientToMonitor(patient) {
       const payload = {
         event: this.events.ADD_PATIENT,
         account: this.account,
         password: this.password,
-        patient: this.unmonitoredPatients[index],
+        patient: patient,
       };
       const { message } = await this.postRequest(payload);
       if (message === this.events.messages.ADD_PATIENT_SUCCESS) {
@@ -264,11 +265,14 @@ Vue.createApp({
           this.signUpAlertMessage = "註冊成功。";
           this.signUpAlertClass = "alert-success";
 
-          setTimeout(() => {
+          setTimeout(async () => {
             if (!this.stayOpenAfterSignup) {
               const signUpModal = document.getElementById("signUpModal");
               const modalInstance = bootstrap.Modal.getInstance(signUpModal);
               modalInstance.hide();
+            }
+            if (this.autoAddToMonitor) {
+              await this.addPatientToMonitor(this.signUpPatientAccount);
             }
             // Reset form and state
             this.signUpPatientAccount = "";
