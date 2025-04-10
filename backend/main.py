@@ -114,15 +114,41 @@ async def handle_request(request: Request):
         return {"message": "Incorrect token"}
 
     event = post_request.get("event")
-    if event == SIGN_UP_MONITOR and post_request_token:
-        if not has_parameters(post_request, ["account", "password"]):
-            return {"message": MISSING_PARAMETER}
+    if post_request_token:
+        if event == SIGN_UP_MONITOR:
+            if not has_parameters(post_request, ["account", "password"]):
+                return {"message": MISSING_PARAMETER}
 
-        return sign_up_account(
-            db.AccountType.MONITOR,
-            post_request["account"],
-            post_request["password"],
-        )
+            return sign_up_account(
+                db.AccountType.MONITOR,
+                post_request["account"],
+                post_request["password"],
+            )
+
+        elif event in [CHANGE_PASSWORD, CHANGE_USERNAME]:
+            if not has_parameters(post_request, ["account", "password"]):
+                return {"message": MISSING_PARAMETER}
+
+            err = db.authenticate(
+                post_request["account"], post_request["password"]
+            )
+            if err != AUTH_SUCCESS:
+                return {"message": err}
+
+            if event == CHANGE_PASSWORD:
+                if not has_parameters(post_request, ["new_password"]):
+                    return {"message": MISSING_PARAMETER}
+                db.change_account_password(
+                    post_request["account"], post_request["new_password"]
+                )
+            elif event == CHANGE_USERNAME:
+                if not has_parameters(post_request, ["new_account"]):
+                    return {"message": MISSING_PARAMETER}
+                db.change_account_username(
+                    post_request["account"], post_request["new_account"]
+                )
+
+            return {"message": ACCT_CHANGE_SUCCESS}
 
     if event in [
         FETCH_MONITORING_PATIENTS,
@@ -306,34 +332,33 @@ async def handle_request(request: Request):
             else:
                 return {"message": INVALID_ACCT_TYPE}
 
-    elif event == CHANGE_PASSWORD:
-        if not has_parameters(
-            post_request, ["account", "password", "new_password"]
-        ):
+    elif event in [CHANGE_PASSWORD, CHANGE_USERNAME]:
+        if not has_parameters(post_request, ["account", "password"]):
             return {"message": MISSING_PARAMETER}
 
         err = db.authenticate(post_request["account"], post_request["password"])
         if err != AUTH_SUCCESS:
             return {"message": err}
 
-        db.change_account_password(
-            post_request["account"], post_request["new_password"]
-        )
-        return {"message": ACCT_CHANGE_SUCCESS}
-
-    elif event == CHANGE_USERNAME:
-        if not has_parameters(
-            post_request, ["account", "password", "new_account"]
+        if (
+            db.get_account_type(post_request["account"])
+            != db.AccountType.PATIENT
         ):
-            return {"message": MISSING_PARAMETER}
+            return {"message": INVALID_ACCT_TYPE}
 
-        err = db.authenticate(post_request["account"], post_request["password"])
-        if err != AUTH_SUCCESS:
-            return {"message": err}
+        if event == CHANGE_PASSWORD:
+            if not has_parameters(post_request, ["new_password"]):
+                return {"message": MISSING_PARAMETER}
+            db.change_account_password(
+                post_request["account"], post_request["new_password"]
+            )
+        elif event == CHANGE_USERNAME:
+            if not has_parameters(post_request, ["new_account"]):
+                return {"message": MISSING_PARAMETER}
+            db.change_account_username(
+                post_request["account"], post_request["new_account"]
+            )
 
-        db.change_account_username(
-            post_request["account"], post_request["new_account"]
-        )
         return {"message": ACCT_CHANGE_SUCCESS}
 
     else:
