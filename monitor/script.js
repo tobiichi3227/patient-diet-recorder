@@ -520,6 +520,7 @@ Vue.createApp({
   },
   async mounted() {
     await this.loadAPIEvents();
+
     const url = new URL(location.href);
     const params = url.searchParams;
     const account = params.has("acct")
@@ -534,6 +535,16 @@ Vue.createApp({
       this.account = account;
       this.password = password;
       await this.authenticate();
+    }
+
+    const stayOpen = localStorage.getItem("stayOpenAfterSignup");
+    const autoAdd = localStorage.getItem("autoAddToMonitor");
+
+    if (stayOpen !== null) {
+      this.stayOpenAfterSignup = stayOpen === "true";
+    }
+    if (autoAdd !== null) {
+      this.autoAddToMonitor = autoAdd === "true";
     }
 
     setInterval(() => {
@@ -601,6 +612,14 @@ Vue.createApp({
         reversedData[patientAccount] = reversedRecord;
       });
       return reversedData;
+    },
+  },
+  watch: {
+    stayOpenAfterSignup(val) {
+      localStorage.setItem("stayOpenAfterSignup", val);
+    },
+    autoAddToMonitor(val) {
+      localStorage.setItem("autoAddToMonitor", val);
     },
   },
 }).mount("#app");
