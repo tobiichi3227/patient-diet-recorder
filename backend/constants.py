@@ -36,7 +36,7 @@ ACCT_DELETED = "Account deleted."
 ACCT_ALREADY_EXISTS = "Account already exists."
 ACCT_NOT_EXIST = "Nonexistent account."
 INVALID_ACCT_TYPE = "Invalid account type."
-ACCT_CHANGE_SUCCESS = "Account change successful."
+ACCT_CHANGE_SUCCESS = "Account changed successfully."
 
 AUTH_SUCCESS = "Authentication successful."
 AUTH_FAIL_PASSWORD = "Incorrect password."
