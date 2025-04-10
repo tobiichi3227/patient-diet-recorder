@@ -560,19 +560,32 @@
                       請輸入密碼。
                     </div>
                   </div>
-                  <div class="form-check mb-3">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="stayOpenAfterSignup"
-                      v-model="stayOpenAfterSignup"
-                    />
-                    <label class="form-check-label" for="stayOpenAfterSignup">
-                      註冊成功後保持此視窗開啟
-                    </label>
-                    <button type="submit" class="btn btn-primary float-end">
-                      註冊
-                    </button>
+                  <div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="stayOpenAfterSignup"
+                        v-model="stayOpenAfterSignup"
+                      />
+                      <label class="form-check-label" for="stayOpenAfterSignup">
+                        註冊成功後保持此視窗開啟
+                      </label>
+                      <button type="submit" class="btn btn-primary float-end">
+                        註冊
+                      </button>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="autoAddToMonitor"
+                        v-model="autoAddToMonitor"
+                      />
+                      <label class="form-check-label" for="autoAddToMonitor">
+                        自動將註冊的病患加入監控名單
+                      </label>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -615,7 +628,7 @@
                     <span>{{ patient }}</span>
                     <button
                       class="btn btn-success btn-sm me-2"
-                      @click="addPatientToMonitor(index)"
+                      @click="addPatientToMonitor(patient)"
                     >
                       加入監測
                     </button>
