@@ -3,6 +3,7 @@ import json
 import db
 from constants import (
     ACCT_ALREADY_EXISTS,
+    ACCT_CHANGE_SUCCESS,
     ACCT_CREATED,
     ACCT_DELETED,
     ACCT_NOT_EXIST,
@@ -10,6 +11,7 @@ from constants import (
     ADD_PATIENT,
     ADD_PATIENT_SUCCESS,
     AUTH_SUCCESS,
+    CHANGE_PASSWORD,
     CONFIG_JSON_PATH,
     DATA_JSON_PATH,
     DELETE_PATIENT,
@@ -302,6 +304,21 @@ async def handle_request(request: Request):
                 }
             else:
                 return {"message": INVALID_ACCT_TYPE}
+
+    elif event == CHANGE_PASSWORD:
+        if not has_parameters(
+            post_request, ["account", "password", "new_password"]
+        ):
+            return {"message": MISSING_PARAMETER}
+
+        err = db.authenticate(post_request["account"], post_request["password"])
+        if err != AUTH_SUCCESS:
+            return {"message": err}
+
+        db.change_account_password(
+            post_request["account"], post_request["new_password"]
+        )
+        return {"message": ACCT_CHANGE_SUCCESS}
 
     else:
         return {"message": INVALID_EVENT}

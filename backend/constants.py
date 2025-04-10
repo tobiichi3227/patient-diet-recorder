@@ -27,6 +27,7 @@ UPDATE_RECORD = "update_record"
 FETCH_RECORD = "fetch_record"
 FETCH_MONITORING_PATIENTS = "fetch_monitoring_patients"
 FETCH_UNMONITORED_PATIENTS = "fetch_unmonitored_patients"
+CHANGE_PASSWORD = "change_password"
 
 # Messages
 ACCT_CREATED = "Account created."
@@ -34,6 +35,7 @@ ACCT_DELETED = "Account deleted."
 ACCT_ALREADY_EXISTS = "Account already exists."
 ACCT_NOT_EXIST = "Nonexistent account."
 INVALID_ACCT_TYPE = "Invalid account type."
+ACCT_CHANGE_SUCCESS = "Account change successful."
 
 AUTH_SUCCESS = "Authentication successful."
 AUTH_FAIL_PASSWORD = "Incorrect password."
