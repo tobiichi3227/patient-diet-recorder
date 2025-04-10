@@ -98,6 +98,15 @@ def change_account_password(username: str, password: str):
         )
 
 
+def change_account_username(username: str, new_username: str):
+    with sqlite3.connect(ACCOUNTS_DB) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE accounts SET username = ? WHERE username = ?",
+            (new_username, username),
+        )
+
+
 def get_account_type(username: str) -> str | None:
     with sqlite3.connect(ACCOUNTS_DB) as conn:
         cursor = conn.cursor()

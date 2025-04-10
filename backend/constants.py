@@ -28,6 +28,7 @@ FETCH_RECORD = "fetch_record"
 FETCH_MONITORING_PATIENTS = "fetch_monitoring_patients"
 FETCH_UNMONITORED_PATIENTS = "fetch_unmonitored_patients"
 CHANGE_PASSWORD = "change_password"
+CHANGE_USERNAME = "change_username"
 
 # Messages
 ACCT_CREATED = "Account created."
