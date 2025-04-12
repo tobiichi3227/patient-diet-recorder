@@ -1,0 +1,44 @@
+name: Backend Unit Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+          export PATH="$HOME/.poetry/bin:$PATH"
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Run tests with coverage
+        run: |
+          cd backend
+          echo "{\"api_url\": \"http://localhost:8000\"}" > config.json
+          poetry run coverage run -m unittest discover -s . -p "test_*.py"
+          poetry run coverage html
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/htmlcov
+
+

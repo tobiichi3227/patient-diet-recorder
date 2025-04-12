@@ -191,7 +191,8 @@ class TestAPIEndpoints(unittest.TestCase):
         })
         self.assertEqual(res.json()["message"], "Incorrect token")
 
-    def test_invalid_event_without_token(self):
+    @patch("main.load_json_file", side_effect=mocked_load_json_file)
+    def test_invalid_event_without_token(self, _):
         res = client.post("/", json={
             "event": "does_not_exist"
         })
