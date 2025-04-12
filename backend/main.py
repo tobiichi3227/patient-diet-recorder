@@ -15,6 +15,8 @@ from constants import (
     CHANGE_USERNAME,
     CONFIG_JSON_PATH,
     DATA_JSON_PATH,
+    DELETE_MONITOR,
+    DELETE_MONITOR_SUCCESS,
     DELETE_PATIENT,
     DELETE_PATIENT_SUCCESS,
     FETCH_MONITORING_PATIENTS,
@@ -124,6 +126,17 @@ async def handle_request(request: Request):
                 post_request["account"],
                 post_request["password"],
             )
+
+        elif event == DELETE_MONITOR:
+            if not has_parameters(post_request, ["account"]):
+                return {"message": MISSING_PARAMETER}
+
+            if (
+                err := db.delete_account(post_request["account"])
+            ) != ACCT_DELETED:
+                return {"message": err}
+            else:
+                return {"message": DELETE_MONITOR_SUCCESS}
 
         elif event in [CHANGE_PASSWORD, CHANGE_USERNAME]:
             if not has_parameters(post_request, ["account", "password"]):

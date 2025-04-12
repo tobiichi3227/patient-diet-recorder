@@ -6,11 +6,14 @@ import db
 from constants import (
     ACCT_CHANGE_SUCCESS,
     ACCT_CREATED,
+    ACCT_NOT_EXIST,
     ADD_PATIENT,
     ADD_PATIENT_SUCCESS,
     AUTH_SUCCESS,
     CHANGE_PASSWORD,
     CHANGE_USERNAME,
+    DELETE_MONITOR,
+    DELETE_MONITOR_SUCCESS,
     DELETE_PATIENT,
     DELETE_PATIENT_SUCCESS,
     FETCH_MONITORING_PATIENTS,
@@ -198,6 +201,17 @@ class TestAPIEndpoints(unittest.TestCase):
             },
         )
         self.assertEqual(res.json()["message"], DELETE_PATIENT_SUCCESS)
+
+        res = client.post(
+            "/",
+            json={
+                "token": TEST_TOKEN,
+                "event": DELETE_MONITOR,
+                "account": "monitor1",
+            },
+        )
+        self.assertEqual(res.json()["message"], DELETE_MONITOR_SUCCESS)
+        self.assertEqual(db.authenticate("monitor1", "pass123"), ACCT_NOT_EXIST)
 
     @patch("main.load_json_file", side_effect=mocked_load_json_file)
     @patch("main.write_json_file", side_effect=mocked_write_json_file)
