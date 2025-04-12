@@ -201,6 +201,7 @@ class TestAPIEndpoints(unittest.TestCase):
             },
         )
         self.assertEqual(res.json()["message"], DELETE_PATIENT_SUCCESS)
+        self.assertEqual(db.authenticate("patient1", "p123"), ACCT_NOT_EXIST)
 
         res = client.post(
             "/",
