@@ -144,6 +144,30 @@ Vue.createApp({
         this.updateRestrictionText(patientAccount);
       });
     },
+    async syncMonitorData() {
+      if (
+        this.authenticated &&
+          !this.isEditingRestriction &&
+          this.editingRecordIndex === -1 &&
+          !this.confirming
+      ) {
+        const fetchedData = await this.postRequest({
+          event: this.events.FETCH_MONITORING_PATIENTS,
+          account: this.account,
+          password: this.password,
+        });
+        if (
+          !this.confirming &&
+            Object.hasOwn(fetchedData, "message") &&
+            fetchedData.message ===
+              this.events.messages.FETCH_MONITORING_PATIENTS_SUCCESS
+        ) {
+          this.processFetchedData(fetchedData);
+          this.searchPatient();
+        }
+      }
+      await this.fetchUnmonitoredPatients();
+    },
     async updateRecords(patientAccount) {
       const payload = {
         event: this.events.UPDATE_RECORD,
@@ -206,7 +230,8 @@ Vue.createApp({
       const { message } = await this.postRequest(payload);
       if (message === this.events.messages.REMOVE_PATIENT_SUCCESS) {
         console.log(message);
-        await this.fetchUnmonitoredPatients();
+
+        await this.syncMonitorData();
       } else {
         console.error(message);
       }
@@ -226,8 +251,9 @@ Vue.createApp({
         patient_password: patient_password,
       };
       const { message } = await this.postRequest(payload);
-      if (message === this.events.messages.ACCT_DELETED) {
+      if (message === this.events.messages.DELETE_PATIENT_SUCCESS) {
         console.log(message);
+        this.filteredPatientAccounts = this.patientAccounts;
         await this.fetchUnmonitoredPatients();
       } else {
         console.error(message);
@@ -593,28 +619,7 @@ Vue.createApp({
     }, 1000);
 
     setInterval(async () => {
-      if (
-        this.authenticated &&
-        !this.isEditingRestriction &&
-        this.editingRecordIndex === -1 &&
-        !this.confirming
-      ) {
-        const fetchedData = await this.postRequest({
-          event: this.events.FETCH_MONITORING_PATIENTS,
-          account: this.account,
-          password: this.password,
-        });
-        if (
-          !this.confirming &&
-          Object.hasOwn(fetchedData, "message") &&
-          fetchedData.message ===
-            this.events.messages.FETCH_MONITORING_PATIENTS_SUCCESS
-        ) {
-          this.processFetchedData(fetchedData);
-          this.searchPatient();
-        }
-      }
-      await this.fetchUnmonitoredPatients();
+      await this.syncMonitorData();
     }, 3000);
 
     globalThis.addEventListener("scroll", this.handleScroll);
