@@ -195,7 +195,8 @@ Vue.createApp({
     getFoodSumColor() {
       let exceed = false;
       if (this.records["foodCheckboxChecked"]) {
-        exceed = this.records[this.currentDateYY_MM_DD]["foodSum"] +
+        exceed =
+          this.records[this.currentDateYY_MM_DD]["foodSum"] +
             (this.records["waterCheckboxChecked"]
               ? this.records[this.currentDateYY_MM_DD]["waterSum"]
               : 0) >
@@ -206,7 +207,8 @@ Vue.createApp({
     getWaterSumColor() {
       let exceed = false;
       if (this.records["waterCheckboxChecked"]) {
-        exceed = this.records[this.currentDateYY_MM_DD]["waterSum"] +
+        exceed =
+          this.records[this.currentDateYY_MM_DD]["waterSum"] +
             (this.records["foodCheckboxChecked"]
               ? this.records[this.currentDateYY_MM_DD]["foodSum"]
               : 0) >
@@ -287,11 +289,9 @@ Vue.createApp({
     },
     async addData() {
       const d = new Date();
-      const currentDate = `${d.getFullYear()}_${d.getMonth() + 1}_${
-        (
-          "0" + d.getDate()
-        ).slice(-2)
-      }`;
+      const currentDate = `${d.getFullYear()}_${d.getMonth() + 1}_${(
+        "0" + d.getDate()
+      ).slice(-2)}`;
       // Food, Water, Urination, Defecation
       if (!this.handleCustomInput()) {
         alert(this.curLangText.please_enter_a_positive_integer);
@@ -307,11 +307,9 @@ Vue.createApp({
           this.initRecords(currentDate);
         }
         const currentData = {
-          time: `${("0" + d.getHours()).slice(-2)}:${
-            (
-              "0" + d.getMinutes()
-            ).slice(-2)
-          }`,
+          time: `${("0" + d.getHours()).slice(-2)}:${(
+            "0" + d.getMinutes()
+          ).slice(-2)}`,
           food: parseInt(this.inputFood),
           water: parseInt(this.inputWater),
           urination: parseInt(this.inputUrination),
@@ -439,21 +437,15 @@ Vue.createApp({
     setInterval(() => {
       const d = new Date();
       const dayOfWeek = this.curLangText.day_of_week;
-      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${
-        (
-          "0" + d.getDate()
-        ).slice(-2)
-      } (${dayOfWeek[d.getDay()]})`;
-      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${
-        (
-          "0" + d.getMinutes()
-        ).slice(-2)
-      }:${("0" + d.getSeconds()).slice(-2)}`;
-      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${
-        (
-          "0" + d.getDate()
-        ).slice(-2)
-      }`;
+      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${(
+        "0" + d.getDate()
+      ).slice(-2)} (${dayOfWeek[d.getDay()]})`;
+      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${(
+        "0" + d.getMinutes()
+      ).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
+      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${(
+        "0" + d.getDate()
+      ).slice(-2)}`;
     }, 1000);
 
     setInterval(async () => {

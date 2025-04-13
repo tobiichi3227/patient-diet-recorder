@@ -129,8 +129,8 @@ Vue.createApp({
     processFetchedData(fetchedData) {
       this.patientRecords = fetchedData["patient_records"];
       this.patientAccountsWithPasswords = fetchedData["patient_accounts"];
-      this.patientAccounts = this.patientAccountsWithPasswords.map((account) =>
-        account[0]
+      this.patientAccounts = this.patientAccountsWithPasswords.map(
+        (account) => account[0],
       );
       this.patientAccounts.forEach((patientAccount) => {
         let modified = false;
@@ -149,9 +149,9 @@ Vue.createApp({
     async syncMonitorData() {
       if (
         this.authenticated &&
-          !this.isEditingRestriction &&
-          this.editingRecordIndex === -1 &&
-          !this.confirming
+        !this.isEditingRestriction &&
+        this.editingRecordIndex === -1 &&
+        !this.confirming
       ) {
         const fetchedData = await this.postRequest({
           event: this.events.FETCH_MONITORING_PATIENTS,
@@ -160,9 +160,9 @@ Vue.createApp({
         });
         if (
           !this.confirming &&
-            Object.hasOwn(fetchedData, "message") &&
-            fetchedData.message ===
-              this.events.messages.FETCH_MONITORING_PATIENTS_SUCCESS
+          Object.hasOwn(fetchedData, "message") &&
+          fetchedData.message ===
+            this.events.messages.FETCH_MONITORING_PATIENTS_SUCCESS
         ) {
           this.processFetchedData(fetchedData);
           this.searchPatient();
@@ -178,7 +178,7 @@ Vue.createApp({
       }
     },
     stopSyncInterval() {
-      if (this.syncIntervalId!== null) {
+      if (this.syncIntervalId !== null) {
         clearInterval(this.syncIntervalId);
         this.syncIntervalId = null;
       }
@@ -215,7 +215,7 @@ Vue.createApp({
       const response = await this.postRequest(payload);
       if (
         response.message ===
-          this.events.messages.FETCH_UNMONITORED_PATIENTS_SUCCESS
+        this.events.messages.FETCH_UNMONITORED_PATIENTS_SUCCESS
       ) {
         this.unmonitoredPatients = response["unmonitored_patients"].map(
           (patient) => patient[1],
@@ -241,8 +241,8 @@ Vue.createApp({
     },
     async removePatientFromMonitor(index) {
       const account = this.patientAccounts[index];
-      const [patient, patient_password] = this.patientAccountsWithPasswords
-        .find((p) => p[0] === account);
+      const [patient, patient_password] =
+        this.patientAccountsWithPasswords.find((p) => p[0] === account);
       const payload = {
         event: this.events.REMOVE_PATIENT,
         account: this.account,
@@ -264,8 +264,8 @@ Vue.createApp({
       if (!confirm(`請確認病患: ${account} 是否要出院?`)) {
         return;
       }
-      const [patient, patient_password] = this.patientAccountsWithPasswords
-        .find((p) => p[0] === account);
+      const [patient, patient_password] =
+        this.patientAccountsWithPasswords.find((p) => p[0] === account);
       const payload = {
         event: this.events.DELETE_PATIENT,
         account: this.account,
@@ -385,8 +385,8 @@ Vue.createApp({
     },
     openQrCodeModal(index) {
       const account = this.filteredPatientAccounts[index];
-      const [patient, patient_password] = this.patientAccountsWithPasswords
-        .find((p) => p[0] === account);
+      const [patient, patient_password] =
+        this.patientAccountsWithPasswords.find((p) => p[0] === account);
       this.qrCodePatient = patient;
       this.qrCodePatientPassword = patient_password;
 
@@ -394,8 +394,7 @@ Vue.createApp({
       const encodedPassword = encodeURIComponent(patient_password);
 
       const qrCodeContainer = document.getElementById("qrCodeContainer");
-      const qrData =
-        `${this.webUrl}/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
+      const qrData = `${this.webUrl}/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
       const qrCode = qrcode(0, "H");
       qrCode.addData(qrData);
       qrCode.make();
@@ -459,8 +458,8 @@ Vue.createApp({
           return;
         }
       }
-      this.patientRecords[patientAccount]["isEditing"] = !this
-        .patientRecords[patientAccount]["isEditing"];
+      this.patientRecords[patientAccount]["isEditing"] =
+        !this.patientRecords[patientAccount]["isEditing"];
       if (!this.patientRecords[patientAccount]["isEditing"]) {
         if (limitAmount !== "") {
           this.updateRestrictionText(patientAccount);
@@ -519,7 +518,8 @@ Vue.createApp({
       let exceed = false;
       const patientRecord = this.patientRecords[patientAccount];
       if (patientRecord["foodCheckboxChecked"]) {
-        exceed = patientRecord[this.currentDateYY_MM_DD]["foodSum"] +
+        exceed =
+          patientRecord[this.currentDateYY_MM_DD]["foodSum"] +
             (patientRecord["waterCheckboxChecked"]
               ? patientRecord[this.currentDateYY_MM_DD]["waterSum"]
               : 0) >
@@ -531,7 +531,8 @@ Vue.createApp({
       let exceed = false;
       const patientRecord = this.patientRecords[patientAccount];
       if (patientRecord["waterCheckboxChecked"]) {
-        exceed = patientRecord[this.currentDateYY_MM_DD]["waterSum"] +
+        exceed =
+          patientRecord[this.currentDateYY_MM_DD]["waterSum"] +
             (patientRecord["foodCheckboxChecked"]
               ? patientRecord[this.currentDateYY_MM_DD]["foodSum"]
               : 0) >
@@ -624,25 +625,19 @@ Vue.createApp({
     setInterval(() => {
       const d = new Date();
       const dayOfWeek = ["日", "一", "二", "三", "四", "五", "六"];
-      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${
-        (
-          "0" + d.getDate()
-        ).slice(-2)
-      } (${dayOfWeek[d.getDay()]})`;
-      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${
-        (
-          "0" + d.getMinutes()
-        ).slice(-2)
-      }:${("0" + d.getSeconds()).slice(-2)}`;
-      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${
-        (
-          "0" + d.getDate()
-        ).slice(-2)
-      }`;
+      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${(
+        "0" + d.getDate()
+      ).slice(-2)} (${dayOfWeek[d.getDay()]})`;
+      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${(
+        "0" + d.getMinutes()
+      ).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
+      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${(
+        "0" + d.getDate()
+      ).slice(-2)}`;
     }, 1000);
 
     document.addEventListener("visibilitychange", () => {
-      if(!document.hidden) {
+      if (!document.hidden) {
         this.syncMonitorData();
         this.startSyncInterval();
       }
@@ -657,7 +652,10 @@ Vue.createApp({
     globalThis.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
-    document.removeEventListener("visibilitychange", this.handleVisibilityChange);
+    document.removeEventListener(
+      "visibilitychange",
+      this.handleVisibilityChange,
+    );
     this.stopSyncInterval();
     globalThis.removeEventListener("scroll", this.handleScroll);
   },
