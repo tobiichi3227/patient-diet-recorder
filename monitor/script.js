@@ -618,13 +618,22 @@ Vue.createApp({
       }`;
     }, 1000);
 
+    document.addEventListener("visibilitychange", () => {
+      if(!document.hidden) {
+        this.syncMonitorData();
+      }
+    });
+
     setInterval(async () => {
-      await this.syncMonitorData();
+      if (!document.hidden) {
+        await this.syncMonitorData();
+      }
     }, 3000);
 
     globalThis.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
+    document.removeEventListener("visibilitychange", this.handleVisibilityChange);
     globalThis.removeEventListener("scroll", this.handleScroll);
   },
 }).mount("#app");
