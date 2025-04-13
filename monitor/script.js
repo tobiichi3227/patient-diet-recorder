@@ -41,25 +41,33 @@ Vue.createApp({
       signUpPatientSubmitted: false,
       signUpAlertMessage: "",
       signUpAlertClass: "",
-      stayOpenAfterSignup: false,
+      stayOpenAfterSignup: true,
       autoAddToMonitor: true,
       // ...
       syncIntervalId: null,
+      dietaryItems: ["food", "water", "urination", "defecation"],
+      keysToFilter: {
+        isEditing: false,
+        limitAmount: "",
+        foodCheckboxChecked: false,
+        waterCheckboxChecked: false,
+      },
+      isEditingRestriction: false,
+      tempPatientRecord: {},
+      currentEditingPatient: "",
+      confirming: false,
+      apiUrl: "",
+      webUrl: "",
+      events: {},
     };
   },
-  created() {
+  async created() {
     this.fetchConfig();
-    this.dietaryItems = ["food", "water", "urination", "defecation"];
-    this.keysToFilter = {
-      isEditing: false,
-      limitAmount: "",
-      foodCheckboxChecked: false,
-      waterCheckboxChecked: false,
-    };
-    this.isEditingRestriction = false;
-    this.tempPatientRecord = {};
-    this.currentEditingPatient = "";
-    this.confirming = false;
+    await this.loadAPIEvents();
+
+    this.stayOpenAfterSignup =
+      localStorage.getItem("stayOpenAfterSignup") === "true";
+    this.autoAddToMonitor = localStorage.getItem("autoAddToMonitor") === "true";
   },
   computed: {
     reversedPatientRecords() {
@@ -98,8 +106,12 @@ Vue.createApp({
       }
     },
     async loadAPIEvents() {
-      const response = await fetch("./events.json");
-      this.events = await response.json();
+      try {
+        const response = await fetch("./events.json");
+        this.events = await response.json();
+      } catch (error) {
+        console.error("Failed to load events", error);
+      }
     },
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
@@ -120,6 +132,7 @@ Vue.createApp({
           throw new Error("Failed to post request.");
         }
 
+        // TODO: Remove this console.log
         console.log("Successfully posted the request.");
         return await response.json();
       } catch (error) {
@@ -201,6 +214,7 @@ Vue.createApp({
       };
       const { message } = await this.postRequest(payload);
       if (message === this.events.messages.UPDATE_RECORD_SUCCESS) {
+        // TODO: Remove this console.log
         console.log(message);
       } else {
         console.error("Error:", message);
@@ -233,6 +247,7 @@ Vue.createApp({
       };
       const { message } = await this.postRequest(payload);
       if (message === this.events.messages.ADD_PATIENT_SUCCESS) {
+        // TODO: Remove this console.log
         console.log(message);
         await this.fetchUnmonitoredPatients();
       } else {
@@ -252,6 +267,7 @@ Vue.createApp({
       };
       const { message } = await this.postRequest(payload);
       if (message === this.events.messages.REMOVE_PATIENT_SUCCESS) {
+        // TODO: Remove this console.log
         console.log(message);
 
         await this.syncMonitorData();
@@ -275,6 +291,7 @@ Vue.createApp({
       };
       const { message } = await this.postRequest(payload);
       if (message === this.events.messages.DELETE_PATIENT_SUCCESS) {
+        // TODO: Remove this console.log
         console.log(message);
         this.filteredPatientAccounts = this.patientAccounts;
         await this.fetchUnmonitoredPatients();
@@ -586,15 +603,25 @@ Vue.createApp({
       });
     },
     handleScroll() {
-      if (globalThis.scrollY > 20) {
-        this.showScrollButton = true;
-      } else {
-        this.showScrollButton = false;
-      }
+      this.showScrollButton = globalThis.scrollY > 20;
+    },
+    updateDateTime() {
+      const d = new Date();
+      const dayOfWeek = ["日", "一", "二", "三", "四", "五", "六"];
+      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${(
+        "0" + d.getDate()
+      ).slice(-2)} (${dayOfWeek[d.getDay()]})`;
+      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${(
+        "0" + d.getMinutes()
+      ).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
+      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${(
+        "0" + d.getDate()
+      ).slice(-2)}`;
     },
   },
   async mounted() {
-    await this.loadAPIEvents();
+    this.updateDateTime();
+    setInterval(this.updateDateTime, 1000);
 
     const url = new URL(location.href);
     const params = url.searchParams;
@@ -612,34 +639,12 @@ Vue.createApp({
       await this.authenticate();
     }
 
-    const stayOpen = localStorage.getItem("stayOpenAfterSignup");
-    const autoAdd = localStorage.getItem("autoAddToMonitor");
-
-    if (stayOpen !== null) {
-      this.stayOpenAfterSignup = stayOpen === "true";
-    }
-    if (autoAdd !== null) {
-      this.autoAddToMonitor = autoAdd === "true";
-    }
-
-    setInterval(() => {
-      const d = new Date();
-      const dayOfWeek = ["日", "一", "二", "三", "四", "五", "六"];
-      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${(
-        "0" + d.getDate()
-      ).slice(-2)} (${dayOfWeek[d.getDay()]})`;
-      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${(
-        "0" + d.getMinutes()
-      ).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
-      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${(
-        "0" + d.getDate()
-      ).slice(-2)}`;
-    }, 1000);
-
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
         this.syncMonitorData();
         this.startSyncInterval();
+      } else {
+        this.stopSyncInterval();
       }
     });
 

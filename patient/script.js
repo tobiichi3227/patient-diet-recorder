@@ -34,12 +34,15 @@ Vue.createApp({
       curLangTexts: {},
       showScrollButton: false,
       removingRecord: false,
+      dietaryItems: ["food", "water", "urination", "defecation"],
+      confirming: false,
+      apiUrl: "",
+      events: {},
     };
   },
   async created() {
     this.fetchApiUrl();
-    this.dietaryItems = ["food", "water", "urination", "defecation"];
-    this.confirming = false;
+    await this.loadAPIEvents();
     await this.loadSupportedLanguages();
     await this.loadLangTexts();
     this.loadSelectedLanguage();
@@ -77,16 +80,28 @@ Vue.createApp({
       }
     },
     async loadAPIEvents() {
-      const response = await fetch("./events.json");
-      this.events = await response.json();
+      try {
+        const response = await fetch("./events.json");
+        this.events = await response.json();
+      } catch (error) {
+        console.error("Failed to load events", error);
+      }
     },
     async loadSupportedLanguages() {
-      const response = await fetch("./supported_languages.json");
-      this.supportedLanguages = await response.json();
+      try {
+        const response = await fetch("./supported_languages.json");
+        this.supportedLanguages = await response.json();
+      } catch (error) {
+        console.error("Failed to load supported languages", error);
+      }
     },
     async loadLangTexts() {
-      const response = await fetch("./lang_texts.json");
-      this.curLangTexts = await response.json();
+      try {
+        const response = await fetch("./lang_texts.json");
+        this.curLangTexts = await response.json();
+      } catch (error) {
+        console.error("Failed to load language texts", error);
+      }
     },
     loadSelectedLanguage() {
       const languageCode = localStorage.getItem("selectedLanguageCode");
@@ -115,9 +130,8 @@ Vue.createApp({
       };
     },
     async fetchRecords() {
-      const fetchUrl = this.apiUrl;
       try {
-        const response = await fetch(fetchUrl, {
+        const response = await fetch(this.apiUrl, {
           method: "POST",
           mode: "cors",
           headers: {
@@ -410,15 +424,26 @@ Vue.createApp({
       });
     },
     handleScroll() {
-      if (globalThis.scrollY > 20) {
-        this.showScrollButton = true;
-      } else {
-        this.showScrollButton = false;
-      }
+      this.showScrollButton = globalThis.scrollY > 20;
+    },
+    updateDateTime() {
+      const d = new Date();
+      const dayOfWeek = this.curLangText.day_of_week;
+      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${(
+        "0" + d.getDate()
+      ).slice(-2)} (${dayOfWeek[d.getDay()]})`;
+      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${(
+        "0" + d.getMinutes()
+      ).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
+      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${(
+        "0" + d.getDate()
+      ).slice(-2)}`;
     },
   },
   async mounted() {
-    await this.loadAPIEvents();
+    this.updateDateTime();
+    setInterval(this.updateDateTime, 1000);
+
     const url = new URL(location.href);
     const params = url.searchParams;
     const account = params.has("acct")
@@ -434,19 +459,6 @@ Vue.createApp({
       this.password = password;
       await this.authenticate();
     }
-    setInterval(() => {
-      const d = new Date();
-      const dayOfWeek = this.curLangText.day_of_week;
-      this.currentDate = `${d.getFullYear()}.${d.getMonth() + 1}.${(
-        "0" + d.getDate()
-      ).slice(-2)} (${dayOfWeek[d.getDay()]})`;
-      this.currentTime = `${("0" + d.getHours()).slice(-2)}:${(
-        "0" + d.getMinutes()
-      ).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
-      this.currentDateYY_MM_DD = `${d.getFullYear()}_${d.getMonth() + 1}_${(
-        "0" + d.getDate()
-      ).slice(-2)}`;
-    }, 1000);
 
     setInterval(async () => {
       if (this.authenticated && !this.confirming) {
