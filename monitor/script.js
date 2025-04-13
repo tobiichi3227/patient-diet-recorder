@@ -43,6 +43,8 @@ Vue.createApp({
       signUpAlertClass: "",
       stayOpenAfterSignup: false,
       autoAddToMonitor: true,
+      // ...
+      syncIntervalId: null,
     };
   },
   created() {
@@ -167,6 +169,27 @@ Vue.createApp({
         }
       }
       await this.fetchUnmonitoredPatients();
+    },
+    startSyncInterval() {
+      if (this.syncIntervalId === null) {
+        this.syncIntervalId = setInterval(() => {
+          this.syncMonitorData();
+        }, 3000);
+      }
+    },
+    stopSyncInterval() {
+      if (this.syncIntervalId!== null) {
+        clearInterval(this.syncIntervalId);
+        this.syncIntervalId = null;
+      }
+    },
+    handleVisibilityChange() {
+      if (!document.hidden) {
+        this.syncMonitorData();
+        this.startSyncInterval();
+      } else {
+        this.stopSyncInterval();
+      }
     },
     async updateRecords(patientAccount) {
       const payload = {
@@ -621,6 +644,7 @@ Vue.createApp({
     document.addEventListener("visibilitychange", () => {
       if(!document.hidden) {
         this.syncMonitorData();
+        this.startSyncInterval();
       }
     });
 
@@ -634,6 +658,7 @@ Vue.createApp({
   },
   beforeUnmount() {
     document.removeEventListener("visibilitychange", this.handleVisibilityChange);
+    this.stopSyncInterval();
     globalThis.removeEventListener("scroll", this.handleScroll);
   },
 }).mount("#app");
