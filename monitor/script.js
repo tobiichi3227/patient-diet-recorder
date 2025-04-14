@@ -263,18 +263,21 @@ Vue.createApp({
         alert(`清除 ${patient} 的資料時發生錯誤`);
       }
     },
-    async removePatientFromMonitor(index) {
-      const account = this.patientAccounts[index];
-      const [patient, patient_password] =
-        this.patientAccountsWithPasswords.find((p) => p[0] === account);
+    async removePatientFromMonitor(patient) {
+      const [_, patient_password] = this.patientAccountsWithPasswords.find(
+        (p) => p[0] === patient,
+      );
+
       const payload = {
         event: this.events.REMOVE_PATIENT,
         account: this.account,
         password: this.password,
-        patient: patient,
+        patient,
         patient_password: patient_password,
       };
+
       const { message } = await this.postRequest(payload);
+
       if (message === this.events.messages.REMOVE_PATIENT_SUCCESS) {
         // TODO: Remove this console.log
         console.log(message);
@@ -284,21 +287,25 @@ Vue.createApp({
         console.error(message);
       }
     },
-    async deletePatient(index) {
-      const account = this.patientAccounts[index];
-      if (!confirm(`請確認病患: ${account} 是否要出院?`)) {
+    async deletePatient(patient) {
+      if (!confirm(`請確認病患: ${patient} 是否要出院?`)) {
         return;
       }
-      const [patient, patient_password] =
-        this.patientAccountsWithPasswords.find((p) => p[0] === account);
+
+      const [_, patient_password] = this.patientAccountsWithPasswords.find(
+        (p) => p[0] === patient,
+      );
+
       const payload = {
         event: this.events.DELETE_PATIENT,
         account: this.account,
         password: this.password,
-        patient: patient,
+        patient,
         patient_password: patient_password,
       };
+
       const { message } = await this.postRequest(payload);
+
       if (message === this.events.messages.DELETE_PATIENT_SUCCESS) {
         // TODO: Remove this console.log
         console.log(message);
