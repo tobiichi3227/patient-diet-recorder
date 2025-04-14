@@ -197,13 +197,16 @@ Vue.createApp({
         this.stopSyncInterval();
       }
     },
-    async updateRecords(patientAccount) {
+    async updateRecords(
+      patientAccount,
+      record = this.patientRecords[patientAccount],
+    ) {
       const payload = {
         event: this.events.UPDATE_RECORD,
         account: this.account,
         password: this.password,
         patient: patientAccount,
-        data: this.patientRecords[patientAccount],
+        data: record,
       };
       const { message } = await this.postRequest(payload);
       if (message === this.events.messages.UPDATE_RECORD_SUCCESS) {
@@ -245,6 +248,19 @@ Vue.createApp({
         await this.fetchUnmonitoredPatients();
       } else {
         console.error(message);
+      }
+    },
+    async clearPatientData(patient) {
+      if (!confirm(`確定要清除 ${patient} 的所有資料嗎?此操作無法還原。`)) {
+        return;
+      }
+
+      try {
+        await this.updateRecords(patient, {});
+        alert(`已成功清除 ${patient} 的所有資料`);
+      } catch (error) {
+        console.error("Failed to clear patient data:", error);
+        alert(`清除 ${patient} 的資料時發生錯誤`);
       }
     },
     async removePatientFromMonitor(index) {

@@ -647,6 +647,12 @@
                     <span>{{ patient }}</span>
                     <div>
                       <button
+                        class="btn btn-secondary btn-sm me-2"
+                        @click="clearPatientData(patient)"
+                      >
+                        清除資料
+                      </button>
+                      <button
                         class="btn btn-warning btn-sm me-2"
                         @click="removePatientFromMonitor(index)"
                       >
