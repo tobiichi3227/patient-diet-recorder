@@ -459,6 +459,34 @@ Vue.createApp({
         alert("複製 QR Code 失敗，請直接在上方的 QR Code 上按右鍵複製。");
       }
     },
+    printQrCode() {
+      const canvas = document.getElementById("qrCanvas");
+
+      if (!canvas) {
+        alert("找不到 QR Code 圖片。");
+        return;
+      }
+
+      const dataUrl = canvas.toDataURL("image/png");
+      console.log(dataUrl);
+
+      const printWindow = window.open("", "_blank");
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>列印 QR Code</title>
+            <style>
+              body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+              img { max-width: 90%; max-height: 90%; }
+            </style>
+          </head>
+          <body>
+            <img src="${dataUrl}" alt="QR Code" onload="window.print();" />
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    },
     updateRestrictionText(patientAccount) {
       const limitAmount = String(
         this.patientRecords[patientAccount]["limitAmount"],

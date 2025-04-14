@@ -694,13 +694,20 @@
                   style="display: block"
                 >
                 </div>
-                <div class="text-center mt-3">
+                <div class="text-center mt-3 d-flex justify-content-center gap-2">
                   <button
                     type="button"
                     class="btn"
                     @click="copyQrCodeImage($event)"
                   >
                     <i class="fas fa-copy"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn"
+                    @click="printQrCode"
+                  >
+                    <i class="fas fa-print"></i>
                   </button>
                 </div>
               </div>
