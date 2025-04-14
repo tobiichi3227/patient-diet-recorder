@@ -41,8 +41,9 @@ Vue.createApp({
       signUpPatientSubmitted: false,
       signUpAlertMessage: "",
       signUpAlertClass: "",
-      stayOpenAfterSignup: true,
-      autoAddToMonitor: true,
+      stayOpenAfterSignup:
+        localStorage.getItem("stayOpenAfterSignup") === "true",
+      autoAddToMonitor: localStorage.getItem("autoAddToMonitor") === "true",
       // ...
       syncIntervalId: null,
       dietaryItems: ["food", "water", "urination", "defecation"],
@@ -60,14 +61,6 @@ Vue.createApp({
       webUrl: "",
       events: {},
     };
-  },
-  async created() {
-    await this.fetchConfig();
-    await this.loadAPIEvents();
-
-    this.stayOpenAfterSignup =
-      localStorage.getItem("stayOpenAfterSignup") === "true";
-    this.autoAddToMonitor = localStorage.getItem("autoAddToMonitor") === "true";
   },
   computed: {
     reversedPatientRecords() {
