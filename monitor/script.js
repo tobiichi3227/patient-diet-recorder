@@ -62,7 +62,7 @@ Vue.createApp({
     };
   },
   async created() {
-    this.fetchConfig();
+    await this.fetchConfig();
     await this.loadAPIEvents();
 
     this.stayOpenAfterSignup =
@@ -422,6 +422,32 @@ Vue.createApp({
       const modalInstance = new bootstrap.Modal(qrCodeModal);
       modalInstance.show();
     },
+    async copyQrCodeImage(event) {
+      const btn = event.target.closest("button");
+      const icon = btn.querySelector("i");
+      const originalClass = icon.className;
+
+      const qrImg = document.querySelector("#qrCodeContainer img");
+      if (!qrImg) {
+        alert("找不到 QR Code 圖片。");
+        return;
+      }
+
+      try {
+        const blob = await fetch(qrImg.src).then((res) => res.blob());
+        await navigator.clipboard.write([
+          new ClipboardItem({ [blob.type]: blob }),
+        ]);
+
+        icon.className = "fas fa-check";
+        setTimeout(() => {
+          icon.className = originalClass;
+        }, 1500);
+      } catch (error) {
+        console.error("Copy QR Code failed:", error);
+        alert("複製 QR Code 失敗，請直接在上方的 QR Code 上按右鍵複製。");
+      }
+    },
     updateRestrictionText(patientAccount) {
       const limitAmount = String(
         this.patientRecords[patientAccount]["limitAmount"],
@@ -636,6 +662,8 @@ Vue.createApp({
       this.authenticated = false;
       this.account = account;
       this.password = password;
+      await this.fetchConfig();
+      await this.loadAPIEvents();
       await this.authenticate();
     }
 

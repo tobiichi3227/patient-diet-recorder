@@ -41,7 +41,7 @@ Vue.createApp({
     };
   },
   async created() {
-    this.fetchApiUrl();
+    await this.fetchApiUrl();
     await this.loadAPIEvents();
     await this.loadSupportedLanguages();
     await this.loadLangTexts();
