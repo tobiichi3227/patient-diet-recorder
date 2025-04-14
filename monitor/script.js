@@ -468,7 +468,7 @@ Vue.createApp({
       }
 
       const dataUrl = canvas.toDataURL("image/png");
-      console.log(dataUrl);
+      const patient = this.qrCodePatient;
 
       const printWindow = window.open("", "_blank");
       printWindow.document.write(`
@@ -476,11 +476,27 @@ Vue.createApp({
           <head>
             <title>列印 QR Code</title>
             <style>
-              body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-              img { max-width: 90%; max-height: 90%; }
+              body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                font-family: sans-serif;
+              }
+              h2 {
+                font-size: 18px;
+                margin-bottom: 20px;
+              }
+              img {
+                max-width: 90%;
+                max-height: 90%;
+              }
             </style>
           </head>
           <body>
+            <h2>${patient}</h2>
             <img src="${dataUrl}" alt="QR Code" onload="window.print();" />
           </body>
         </html>
