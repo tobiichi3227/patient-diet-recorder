@@ -403,39 +403,51 @@ Vue.createApp({
       const encodedPatient = encodeURIComponent(patient);
       const encodedPassword = encodeURIComponent(patient_password);
 
-      const qrCodeContainer = document.getElementById("qrCodeContainer");
       const qrData = `${this.webUrl}/patient/?acct=${encodedPatient}&pw=${encodedPassword}`;
       const qrCode = qrcode(0, "H");
       qrCode.addData(qrData);
       qrCode.make();
 
-      qrCodeContainer.innerHTML = qrCode.createImgTag(6);
+      const qrCodeContainer = document.getElementById("qrCodeContainer");
+      qrCodeContainer.innerHTML = "";
+
+      const canvas = document.createElement("canvas");
+      canvas.id = "qrCanvas";
+      const desiredSize = 256;
+      canvas.width = desiredSize;
+      canvas.height = desiredSize;
+
+      qrCode.renderTo2dContext(canvas.getContext("2d"), 6);
+      qrCodeContainer.appendChild(canvas);
 
       const qrCodeModal = document.getElementById("qrCodeModal");
       const modalInstance = new bootstrap.Modal(qrCodeModal);
       modalInstance.show();
     },
     async copyQrCodeImage(event) {
+      const canvas = document.getElementById("qrCanvas");
       const btn = event.target.closest("button");
       const icon = btn.querySelector("i");
-      const originalClass = icon.className;
 
-      const qrImg = document.querySelector("#qrCodeContainer img");
-      if (!qrImg) {
+      if (!canvas) {
         alert("找不到 QR Code 圖片。");
         return;
       }
 
       try {
-        const blob = await fetch(qrImg.src).then((res) => res.blob());
-        await navigator.clipboard.write([
-          new ClipboardItem({ [blob.type]: blob }),
-        ]);
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            return;
+          }
+          await navigator.clipboard.write([
+            new ClipboardItem({ [blob.type]: blob }),
+          ]);
 
-        icon.className = "fas fa-check";
-        setTimeout(() => {
-          icon.className = originalClass;
-        }, 1500);
+          icon.className = "fas fa-check";
+          setTimeout(() => {
+            icon.className = "fas fa-copy";
+          }, 1500);
+        }, "image/png");
       } catch (error) {
         console.error("Copy QR Code failed:", error);
         alert("複製 QR Code 失敗，請直接在上方的 QR Code 上按右鍵複製。");
