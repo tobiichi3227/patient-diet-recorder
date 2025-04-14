@@ -409,6 +409,7 @@ Vue.createApp({
       qrCode.make();
 
       const qrCodeContainer = document.getElementById("qrCodeContainer");
+      // Clear previous content
       qrCodeContainer.innerHTML = "";
 
       const canvas = document.createElement("canvas");
@@ -435,19 +436,24 @@ Vue.createApp({
       }
 
       try {
-        canvas.toBlob(async (blob) => {
-          if (!blob) {
-            return;
-          }
-          await navigator.clipboard.write([
-            new ClipboardItem({ [blob.type]: blob }),
-          ]);
+        const blob = await new Promise((resolve, reject) => {
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              reject(new Error("Failed to convert QR Code to image."));
+            } else {
+              resolve(blob);
+            }
+          }, "image/png");
+        });
 
-          icon.className = "fas fa-check";
-          setTimeout(() => {
-            icon.className = "fas fa-copy";
-          }, 1500);
-        }, "image/png");
+        await navigator.clipboard.write([
+          new ClipboardItem({ [blob.type]: blob }),
+        ]);
+
+        icon.className = "fas fa-check";
+        setTimeout(() => {
+          icon.className = "fas fa-copy";
+        }, 1500);
       } catch (error) {
         console.error("Copy QR Code failed:", error);
         alert("複製 QR Code 失敗，請直接在上方的 QR Code 上按右鍵複製。");
