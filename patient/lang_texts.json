@@ -39,7 +39,10 @@
       "四",
       "五",
       "六"
-    ]
+    ],
+    "confirm_action": "請確認操作",
+    "cancel": "取消",
+    "confirm": "確認"
   },
   "zh-CN": {
     "app_title": "病患饮食排泄记录",
@@ -81,7 +84,10 @@
       "四",
       "五",
       "六"
-    ]
+    ],
+    "confirm_action": "请确认操作",
+    "cancel": "取消",
+    "confirm": "确认"
   },
   "vi": {
     "app_title": "Hồ sơ chế độ ăn uống và bài tiết của bệnh nhân",
@@ -123,7 +129,10 @@
       "Thứ Năm",
       "Thứ Sáu",
       "Thứ Bảy"
-    ]
+    ],
+    "confirm_action": "Vui lòng xác nhận thao tác",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận"
   },
   "id": {
     "app_title": "Catatan diet dan ekskresi pasien",
@@ -165,7 +174,10 @@
       "Kamis",
       "Jum'at",
       "Sabtu"
-    ]
+    ],
+    "confirm_action": "Harap konfirmasi tindakan",
+    "cancel": "Batal",
+    "confirm": "Konfirmasi"
   },
   "en": {
     "app_title": "Patient Intake & Output Recorder",
@@ -207,6 +219,9 @@
       "Thu.",
       "Fri.",
       "Sat."
-    ]
+    ],
+    "confirm_action": "Please confirm action",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   }
 }
