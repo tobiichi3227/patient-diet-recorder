@@ -320,22 +320,37 @@ async def handle_request(request: Request):
         if not has_parameters(post_request, ["account", "password", "patient"]):
             return {"message": MISSING_PARAMETER}
 
-        err = db.authenticate(post_request["account"], post_request["password"])
+        account, password = post_request["account"], post_request["password"]
+        err = db.authenticate(account, password)
         if err != AUTH_SUCCESS:
             return {"message": err}
 
         patient_account = post_request["patient"]
         if event == UPDATE_RECORD:
-            if db.get_account_type(patient_account) == db.AccountType.PATIENT:
-                data = load_json_file(DATA_JSON_PATH)
-                data[patient_account] = post_request["data"]
-                write_json_file(DATA_JSON_PATH, data)
-
-                return {"message": UPDATE_RECORD_SUCCESS}
-            else:
+            if db.get_account_type(patient_account) != db.AccountType.PATIENT:
                 return {"message": INVALID_ACCT_TYPE}
 
-        if event == FETCH_RECORD:
+            data = load_json_file(DATA_JSON_PATH)
+            original_data = data[patient_account]
+            update_data = post_request["data"]
+            if db.get_account_type(account) == db.AccountType.PATIENT:
+                keys_to_filter = [
+                    "isEditing",
+                    "limitAmount",
+                    "foodCheckboxChecked",
+                    "waterCheckboxChecked",
+                ]
+
+                for key in keys_to_filter:
+                    if key in update_data and key in original_data:
+                        update_data[key] = original_data[key]
+
+            data[patient_account] = update_data
+            write_json_file(DATA_JSON_PATH, data)
+
+            return {"message": UPDATE_RECORD_SUCCESS}
+
+        elif event == FETCH_RECORD:
             if db.get_account_type(patient_account) == db.AccountType.PATIENT:
                 data = load_json_file(DATA_JSON_PATH)
                 return {
