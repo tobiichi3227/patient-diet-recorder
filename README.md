@@ -87,11 +87,18 @@ pip install -r requirements.txt
 
 ### Run the backend server
 
+Once installed and configured, you can start the server with Uvicorn.
 Open your terminal and execute the following commands:
 
-```bash
-python -m uvicorn main:app --reload
-```
+- Using Poetry
+  ```bash
+  poetry run uvicorn main:app --reload
+  ```
+
+- Using Python
+  ```bash
+  python -m uvicorn main:app --reload
+  ```
 
 This will install the necessary dependencies using Poetry and start your server
 using Uvicorn with automatic reloading enabled. With these steps completed, your
