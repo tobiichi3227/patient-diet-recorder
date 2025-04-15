@@ -47,6 +47,9 @@ Vue.createApp({
       // Bootstrap alert
       bootstrapAlertMessage: "",
       bootstrapAlertClass: "alert-danger",
+      // Bootstrap Confirm Modal
+      confirmMessage: "",
+      confirmResolver: null,
       // Internal Usage
       syncIntervalId: null,
       dietaryItems: ["food", "water", "urination", "defecation"],
@@ -124,6 +127,27 @@ Vue.createApp({
       setTimeout(() => {
         this.bootstrapAlertMessage = "";
       }, 3000);
+    },
+    showConfirm(message) {
+      this.confirmMessage = message;
+
+      return new Promise((resolve) => {
+        this.confirmResolver = resolve;
+
+        const confirmModal = document.getElementById("confirmModal");
+        const modal = new bootstrap.Modal(confirmModal);
+        modal.show();
+      });
+    },
+    handleConfirm(result) {
+      const confirmModal = document.getElementById("confirmModal");
+      const modal = bootstrap.Modal.getInstance(confirmModal);
+      modal.hide();
+
+      if (this.confirmResolver) {
+        this.confirmResolver(result);
+        this.confirmResolver = null;
+      }
     },
     async postRequest(payload) {
       try {
@@ -267,7 +291,10 @@ Vue.createApp({
       }
     },
     async clearPatientData(patient) {
-      if (!confirm(`確定要清除 ${patient} 的所有資料嗎?此操作無法還原。`)) {
+      const confirmed = await this.showConfirm(
+        `確定要清除 ${patient} 的所有資料嗎?此操作無法還原。`,
+      );
+      if (!confirmed) {
         return;
       }
 
@@ -304,7 +331,10 @@ Vue.createApp({
       }
     },
     async deletePatient(patient) {
-      if (!confirm(`請確認病患: ${patient} 是否要出院?`)) {
+      const confirmed = await this.showConfirm(
+        `請確認病患: ${patient} 是否要出院?`,
+      );
+      if (!confirmed) {
         return;
       }
 
@@ -680,8 +710,9 @@ Vue.createApp({
       }
       return exceed ? "red" : "inherit";
     },
-    confirmLogout() {
-      if (confirm("請確認是否要登出")) {
+    async confirmLogout() {
+      const confirmed = await this.showConfirm("請確認是否要登出");
+      if (confirmed) {
         this.account = "";
         this.password = "";
         this.authenticated = false;
@@ -704,7 +735,8 @@ Vue.createApp({
         `排便: ${record["defecation"]}`,
       ];
       const confirmMessage = confirmMessageLines.join("\n");
-      if (confirm(confirmMessage)) {
+      const confirmed = await this.showConfirm(confirmMessage);
+      if (confirmed) {
         this.removingRecord = true;
 
         this.patientRecords[patientAccount][date]["count"] -= 1;

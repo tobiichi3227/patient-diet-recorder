@@ -37,6 +37,9 @@ Vue.createApp({
       // Bootstrap alert
       bootstrapAlertMessage: "",
       bootstrapAlertClass: "alert-danger",
+      // Bootstrap Confirm Modal
+      confirmMessage: "",
+      confirmResolver: null,
       // Internal Usage
       dietaryItems: ["food", "water", "urination", "defecation"],
       confirming: false,
@@ -172,6 +175,27 @@ Vue.createApp({
         this.bootstrapAlertMessage = "";
       }, 5000);
     },
+    showConfirm(message) {
+      this.confirmMessage = message;
+
+      return new Promise((resolve) => {
+        this.confirmResolver = resolve;
+
+        const confirmModal = document.getElementById("confirmModal");
+        const modal = new bootstrap.Modal(confirmModal);
+        modal.show();
+      });
+    },
+    handleConfirm(result) {
+      const confirmModal = document.getElementById("confirmModal");
+      const modal = bootstrap.Modal.getInstance(confirmModal);
+      modal.hide();
+
+      if (this.confirmResolver) {
+        this.confirmResolver(result);
+        this.confirmResolver = null;
+      }
+    },
     processRestrictionText() {
       if (
         !isNaN(this.records["limitAmount"]) &&
@@ -249,8 +273,9 @@ Vue.createApp({
       }
       return exceed ? "red" : "inherit";
     },
-    confirmLogout() {
-      if (confirm(this.curLangText.confirm_logout)) {
+    async confirmLogout() {
+      const confirmed = await this.showConfirm(this.curLangText.confirm_logout);
+      if (confirmed) {
         this.account = "";
         this.password = "";
         this.authenticated = false;
@@ -423,7 +448,10 @@ Vue.createApp({
     },
     async removeRecord(target) {
       this.confirming = true;
-      if (confirm(this.curLangText.confirm_remove_record)) {
+      const confirmed = await this.showConfirm(
+        this.curLangText.confirm_remove_record,
+      );
+      if (confirmed) {
         this.removingRecord = true;
         const [date, index] = target.attributes.id.textContent.split("-");
 
