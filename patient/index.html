@@ -27,6 +27,15 @@
 
   <body>
     <div id="app" class="container">
+      <div
+        v-if="bootstrapAlertMessage"
+        :class="['alert', bootstrapAlertClass, 'alert-dismissible', 'fade', 'show']"
+        role="alert"
+        style="position: fixed; top: 20px; right: 20px; z-index: 10050; min-width: 200px;"
+      >
+        {{ bootstrapAlertMessage }}
+        <button type="button" class="btn-close" @click="bootstrapAlertMessage = ''"></button>
+      </div>
       <template v-if="!authenticated">
         <div class="row mt-1">
           <div class="col text-center">

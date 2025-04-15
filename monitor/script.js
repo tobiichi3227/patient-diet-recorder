@@ -44,7 +44,10 @@ Vue.createApp({
       stayOpenAfterSignup:
         localStorage.getItem("stayOpenAfterSignup") === "true",
       autoAddToMonitor: localStorage.getItem("autoAddToMonitor") === "true",
-      // ...
+      // Bootstrap alert
+      bootstrapAlertMessage: "",
+      bootstrapAlertClass: "alert-danger",
+      // Internal Usage
       syncIntervalId: null,
       dietaryItems: ["food", "water", "urination", "defecation"],
       keysToFilter: {
@@ -61,6 +64,10 @@ Vue.createApp({
       webUrl: "",
       events: {},
     };
+  },
+  async created() {
+    await this.fetchConfig();
+    await this.loadAPIEvents();
   },
   computed: {
     reversedPatientRecords() {
@@ -109,6 +116,15 @@ Vue.createApp({
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
+    showAlert(message, type = "success") {
+      this.bootstrapAlertMessage = message;
+      this.bootstrapAlertClass =
+        type === "success" ? "alert-success" : "alert-danger";
+
+      setTimeout(() => {
+        this.bootstrapAlertMessage = "";
+      }, 3000);
+    },
     async postRequest(payload) {
       try {
         const response = await fetch(this.apiUrl, {
@@ -153,8 +169,8 @@ Vue.createApp({
       });
     },
     async syncMonitorData() {
+      if (!this.authenticated) return;
       if (
-        this.authenticated &&
         !this.isEditingRestriction &&
         this.editingRecordIndex === -1 &&
         !this.confirming
@@ -257,10 +273,10 @@ Vue.createApp({
 
       try {
         await this.updateRecords(patient, {});
-        alert(`已成功清除 ${patient} 的所有資料`);
+        this.showAlert(`已成功清除 ${patient} 的所有資料`);
       } catch (error) {
         console.error("Failed to clear patient data:", error);
-        alert(`清除 ${patient} 的資料時發生錯誤`);
+        this.showAlert(`清除 ${patient} 的資料時發生錯誤`, "alert-danger");
       }
     },
     async removePatientFromMonitor(patient) {
@@ -324,16 +340,16 @@ Vue.createApp({
       if (Object.hasOwn(fetchedData, "message")) {
         switch (fetchedData.message) {
           case this.events.messages.ACCT_NOT_EXIST:
-            alert("帳號不存在");
+            this.showAlert("帳號不存在", "alert-danger");
             this.account = "";
             this.password = "";
             break;
           case this.events.messages.AUTH_FAIL_PASSWORD:
-            alert("密碼錯誤");
+            this.showAlert("密碼錯誤", "alert-danger");
             this.password = "";
             break;
           case this.events.messages.INVALID_ACCT_TYPE:
-            alert("此帳號沒有管理權限");
+            this.showAlert("此帳號沒有管理權限", "alert-danger");
             this.account = "";
             this.password = "";
             break;
@@ -454,7 +470,7 @@ Vue.createApp({
       const icon = btn.querySelector("i");
 
       if (!canvas) {
-        alert("找不到 QR Code 圖片。");
+        this.showAlert("找不到 QR Code 圖片。", "alert-danger");
         return;
       }
 
@@ -479,14 +495,17 @@ Vue.createApp({
         }, 1500);
       } catch (error) {
         console.error("Copy QR Code failed:", error);
-        alert("複製 QR Code 失敗，請直接在上方的 QR Code 上按右鍵複製。");
+        this.showAlert(
+          "複製 QR Code 失敗，請直接在上方的 QR Code 上按右鍵複製。",
+          "alert-danger",
+        );
       }
     },
     printQrCode() {
       const canvas = document.getElementById("qrCanvas");
 
       if (!canvas) {
-        alert("找不到 QR Code 圖片。");
+        this.showAlert("找不到 QR Code 圖片。", "alert-danger");
         return;
       }
 
@@ -565,17 +584,17 @@ Vue.createApp({
           !this.patientRecords[patientAccount]["waterCheckboxChecked"]
         ) {
           if (isNaN(limitAmount)) {
-            alert("請勾選選項並輸入數字");
+            this.showAlert("請勾選選項並輸入數字", "alert-danger");
             return;
           } else if (limitAmount !== "") {
-            alert("請勾選選項");
+            this.showAlert("請勾選選項", "alert-danger");
             return;
           }
         } else if (isNaN(limitAmount) || limitAmount === "") {
-          alert("請輸入數字");
+          this.showAlert("請輸入數字", "alert-danger");
           return;
         } else if (limitAmount.startsWith("-") || limitAmount.startsWith(".")) {
-          alert("請輸入正整數");
+          this.showAlert("請輸入正整數", "alert-danger");
           return;
         }
       }

@@ -34,6 +34,10 @@ Vue.createApp({
       curLangTexts: {},
       showScrollButton: false,
       removingRecord: false,
+      // Bootstrap alert
+      bootstrapAlertMessage: "",
+      bootstrapAlertClass: "alert-danger",
+      // Internal Usage
       dietaryItems: ["food", "water", "urination", "defecation"],
       confirming: false,
       apiUrl: "",
@@ -159,6 +163,15 @@ Vue.createApp({
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
+    showAlert(message, type = "success") {
+      this.bootstrapAlertMessage = message;
+      this.bootstrapAlertClass =
+        type === "success" ? "alert-success" : "alert-danger";
+
+      setTimeout(() => {
+        this.bootstrapAlertMessage = "";
+      }, 5000);
+    },
     processRestrictionText() {
       if (
         !isNaN(this.records["limitAmount"]) &&
@@ -184,16 +197,22 @@ Vue.createApp({
       if (Object.hasOwn(fetchedData, "message")) {
         switch (fetchedData.message) {
           case this.events.messages.ACCT_NOT_EXIST:
-            alert(this.curLangText.nonexistent_account);
+            this.showAlert(
+              this.curLangText.nonexistent_account,
+              "alert-danger",
+            );
             this.account = "";
             this.password = "";
             break;
           case this.events.messages.AUTH_FAIL_PASSWORD:
-            alert(this.curLangText.incorrect_password);
+            this.showAlert(this.curLangText.incorrect_password, "alert-danger");
             this.password = "";
             break;
           case this.events.messages.INVALID_ACCT_TYPE:
-            alert(this.curLangText.account_without_permission);
+            this.showAlert(
+              this.curLangText.account_without_permission,
+              "alert-danger",
+            );
             this.account = "";
             this.password = "";
             break;
@@ -308,7 +327,10 @@ Vue.createApp({
       ).slice(-2)}`;
       // Food, Water, Urination, Defecation
       if (!this.handleCustomInput()) {
-        alert(this.curLangText.please_enter_a_positive_integer);
+        this.showAlert(
+          this.curLangText.please_enter_a_positive_integer,
+          "alert-danger",
+        );
         return;
       }
       if (
@@ -375,7 +397,7 @@ Vue.createApp({
       }
       const inputWeight = parseFloat(this.inputWeight);
       if (isNaN(inputWeight) || inputWeight < 0.01 || inputWeight > 300) {
-        alert(this.curLangText.weight_abnormal);
+        this.showAlert(this.curLangText.weight_abnormal, "alert-danger");
       } else {
         if (!this.records[currentDate]) {
           this.initRecords(currentDate);
