@@ -42,12 +42,6 @@ class RecordItem(BaseModel):
     urination: int
     defecation: int
 
-    @validator("time")
-    def validate_time(cls, v):
-        input_time = parse_time(v)
-        now = datetime.now().time()
-        assert input_time <= now, f"time {v} is in the future"
-        return v
 
 
 class DailyRecord(BaseModel):
@@ -83,6 +77,13 @@ class DailyRecord(BaseModel):
             )
             weight_val = int(self.weight.split()[0])
             assert weight_val > 0, "weight must be a positive integer"
+        for record in self.data:
+            if record_date < date.today():
+                continue
+            input_time = parse_time(record.time)
+            now = datetime.now().time()
+            if input_time > now:
+                raise ValueError(f"time {input_time} is in the future")
 
         return self
 
