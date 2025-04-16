@@ -6,9 +6,9 @@ from typing import Any
 from pydantic import (
     BaseModel,
     Field,
+    NonNegativeInt,
     RootModel,
     model_validator,
-    validator,
 )
 
 
@@ -37,21 +37,20 @@ def parse_time(value: str) -> time_cls:
 
 class RecordItem(BaseModel):
     time: str
-    food: int
-    water: int
-    urination: int
-    defecation: int
-
+    food: NonNegativeInt
+    water: NonNegativeInt
+    urination: NonNegativeInt
+    defecation: NonNegativeInt
 
 
 class DailyRecord(BaseModel):
     data: list[RecordItem]
-    count: int
+    count: NonNegativeInt
     recordDate: str
-    foodSum: int
-    waterSum: int
-    urinationSum: int
-    defecationSum: int
+    foodSum: NonNegativeInt
+    waterSum: NonNegativeInt
+    urinationSum: NonNegativeInt
+    defecationSum: NonNegativeInt
     weight: str
 
     @model_validator(mode="after")
