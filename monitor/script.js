@@ -377,7 +377,7 @@ Vue.createApp({
       }
 
       try {
-        await this.updateRecords(patient, {});
+        await this.updateRecords(patient, this.keysToFilter);
         this.showAlert(`已成功清除 ${patient} 的所有資料`);
       } catch (error) {
         console.error("Failed to clear patient data:", error);
