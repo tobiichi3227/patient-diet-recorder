@@ -39,6 +39,8 @@ from constants import (
 )
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import ValidationError
+from validator import UpdateDataModel
 
 app = FastAPI()
 app.add_middleware(
@@ -329,6 +331,11 @@ async def handle_request(request: Request):
         if event == UPDATE_RECORD:
             if db.get_account_type(patient_account) != db.AccountType.PATIENT:
                 return {"message": INVALID_ACCT_TYPE}
+
+            try:
+                UpdateDataModel.model_validate(post_request["data"])
+            except ValidationError as e:
+                return {"message": f"Invalid record format: {e}"}
 
             data = load_json_file(DATA_JSON_PATH)
             original_data = data[patient_account]
