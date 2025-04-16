@@ -2,6 +2,55 @@
 
 ## Patient Intake/Output Recorder
 
+### 1.2.0 <small>April 16, 2025</small> { id="1.2.0" }
+
+**Features**
+
+- **Monitor**: Transfer patient data between accounts with validation and confirmation (#54)
+- **Monitor**: Clear all data from a monitored patient with confirmation (#53)
+- **Monitor**: Add copy and print QR Code buttons with proper preview and validation (#47, #49)
+- **Signup**: Add options to keep signup modal open and auto-add patient to monitor list (#68, #70)
+- **API**: Introduce unit tests for API and database (#15)
+- **API**: Add support for changing monitor account name and password (#56, #57)
+- **Signup**: Persist signup modal preferences using localStorage
+
+**Improvements**
+
+- **UI**: Improve responsive layout of monitor header bar (#63)
+- **Alert/Confirm**: Replace native `alert()` and `confirm()` with Bootstrap-styled alternatives (#51, #81)
+- **UX**: Show patient username above QR code in print preview
+- **Accessibility**: Align patient button actions with stable patient keys (replace index)
+- **Performance**: Reduce monitor sync bandwidth by syncing only when tab is visible
+- **Refactor**: Debounce search without using lodash (#73)
+- **Maintainability**: Reorder Vue options for consistency
+
+**Fixes**
+
+- Prevent transfer to target with existing data or unmonitored account
+- Improve empty data check using filtered key comparison
+- Correct patient list UI updates after deletion
+- Add missing permission checks and token validation in API
+- Fix z-index of time block overlapping header buttons (#48)
+- Fix grammatical and logic issues in API
+
+**Documentation**
+
+- Add supported languages to `README.md`
+- Update `CONTRIBUTING.md` with new confirm modal translation keys
+
+**CI / Infrastructure**
+
+- Add file-filtering to GitHub Pages deploy
+- Run unit tests in CI for backend
+- Upgrade GitHub Action workflows and dependencies
+
+**Chores**
+
+- Update project logo and favicons
+- Run `poetry update && poetry export`
+- Bump dependencies: Jinja2, Starlette
+- Update copyright
+
 ### 1.1.0 <small>November 10, 2024</small> { id="1.1.0" }
 
 **Added:**
