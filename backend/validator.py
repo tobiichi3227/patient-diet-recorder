@@ -72,11 +72,12 @@ class DailyRecord(BaseModel):
         )
 
         if self.weight != "NaN":
-            assert re.fullmatch(r"\d+ kg", self.weight), (
-                f"invalid weight format: {self.weight}"
-            )
-            weight_val = int(self.weight.split()[0])
-            assert weight_val > 0, "weight must be a positive integer"
+            if not re.fullmatch(r"(-?\d+(?:\.\d+))? kg", self.weight):
+                raise ValueError(f"invalid weight format: {self.weight}")
+            weight_val = float(self.weight.split()[0])
+            if weight_val <= 0:
+                raise ValueError("weight must be a positive integer")
+
         for record in self.data:
             if record_date < date.today():
                 continue
