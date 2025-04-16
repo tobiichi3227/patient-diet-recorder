@@ -44,7 +44,10 @@ provided below:
   "account_without_permission": "{Translate 'This account does not have permission to use this page' here}",
   "confirm_logout": "{Translate 'Please confirm whether you want to log out' here}",
   "weight_abnormal": "{Translate 'The weight you entered is abnormal' here}",
-  "day_of_week": ["{Translate 'Sun.' here}", "{Translate 'Mon.' here}", "{Translate 'Tue.' here}", "{Translate 'Wed.' here}", "{Translate 'Thu.' here}", "{Translate 'Fri.' here}", "{Translate 'Sat.' here}"]
+  "day_of_week": ["{Translate 'Sun.' here}", "{Translate 'Mon.' here}", "{Translate 'Tue.' here}", "{Translate 'Wed.' here}", "{Translate 'Thu.' here}", "{Translate 'Fri.' here}", "{Translate 'Sat.' here}"],
+  "confirm_action": "{Translate 'Please confirm action' here}",
+  "cancel": "{Translate 'Cancel' here}",
+  "confirm": "{Translate 'Confirm' here}"
 }
 ```
 

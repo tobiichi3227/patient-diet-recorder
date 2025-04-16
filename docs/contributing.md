@@ -52,7 +52,10 @@ provided below:
     "{Translate 'Thu.' here}",
     "{Translate 'Fri.' here}",
     "{Translate 'Sat.' here}"
-  ]
+  ],
+  "confirm_action": "{Translate 'Please confirm action' here}",
+  "cancel": "{Translate 'Cancel' here}",
+  "confirm": "{Translate 'Confirm' here}"
 }
 ```
 
