@@ -100,7 +100,8 @@ class PatientData(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def split_records(cls, values: Any):
+    def split_records(cls, values: dict[str, Any]):
+        values = values.copy()
         reserved = {
             "isEditing",
             "limitAmount",
@@ -108,6 +109,8 @@ class PatientData(BaseModel):
             "waterCheckboxChecked",
         }
         records = {k: v for k, v in values.items() if k not in reserved}
+
+        values["records"] = records
 
         for key in records:
             if parse_date_key(key) > date.today():
