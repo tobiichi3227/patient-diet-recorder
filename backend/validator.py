@@ -56,20 +56,23 @@ class DailyRecord(BaseModel):
 
     @model_validator(mode="after")
     def validate_all(self):
-        assert self.count == len(self.data), "count does not match data length"
+        if self.count != len(self.data):
+            raise ValueError("count does not match data length")
 
         for field in ["food", "water", "urination", "defecation"]:
             expected = sum(getattr(item, field) for item in self.data)
             actual = getattr(self, f"{field}Sum")
-            assert actual == expected, (
-                f"{field}Sum expected {expected}, got {actual}"
-            )
-            assert isinstance(actual, int)
+            if actual != expected:
+                raise ValueError(
+                    f"{field}Sum expected {expected}, got {actual}"
+                )
+
+            if not isinstance(actual, int):
+                raise ValueError
 
         record_date = parse_record_date(self.recordDate)
-        assert record_date <= date.today(), (
-            f"recordDate is in the future: {self.recordDate}"
-        )
+        if record_date > date.today():
+            raise ValueError(f"recordDate is in the future: {self.recordDate}")
 
         if self.weight != "NaN":
             if not re.fullmatch(r"(-?\d+(?:\.\d+))? kg", self.weight):
@@ -108,9 +111,8 @@ class PatientData(BaseModel):
         records = {k: v for k, v in values.items() if k not in reserved}
 
         for key in records:
-            assert parse_date_key(key) <= date.today(), (
-                f"record key {key} is in the future"
-            )
+            if parse_date_key(key) > date.today():
+                raise ValueError(f"record key {key} is in the future")
 
         return values
 
