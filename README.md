@@ -104,6 +104,28 @@ This will install the necessary dependencies using Poetry and start your server
 using Uvicorn with automatic reloading enabled. With these steps completed, your
 server should be up and running, ready to handle requests.
 
+## Supported Languages
+
+### Patient Side
+
+The patient interface currently supports the following languages:
+
+- 繁體中文 (Traditional Chinese)
+- 简体中文 (Simplified Chinese)
+- Tiếng Việt (Vietnamese)
+- Bahasa Indonesia
+- English
+
+You can switch languages based on the dropdown at the end of the app.
+
+### Monitor Side
+
+The monitor interface currently supports:
+
+- 繁體中文 (Traditional Chinese)
+
+Additional languages may be added in the future based on demand.
+
 ## Want to Contribute?
 
 Refer to [CONTRIBUTING.md](./CONTRIBUTING.md)
