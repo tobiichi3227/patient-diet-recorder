@@ -50,6 +50,9 @@ Vue.createApp({
       // Bootstrap Confirm Modal
       confirmMessage: "",
       confirmResolver: null,
+      // Transfer Modal
+      transferFrom: "",
+      transferTo: "",
       // Internal Usage
       syncIntervalId: null,
       dietaryItems: ["food", "water", "urination", "defecation"],
@@ -290,12 +293,87 @@ Vue.createApp({
         console.error(message);
       }
     },
-    async clearPatientData(patient) {
-      const confirmed = await this.showConfirm(
-        `確定要清除 ${patient} 的所有資料嗎?此操作無法還原。`,
-      );
-      if (!confirmed) {
+    openTransferModal(fromPatient) {
+      this.transferFrom = fromPatient;
+      this.transferTo = "";
+      const transferModal = document.getElementById("transferModal");
+      const modal = new bootstrap.Modal(transferModal);
+      modal.show();
+    },
+    async transferPatientData() {
+      if (!this.transferTo.trim()) {
+        this.showAlert("請輸入目標帳號", "alert-danger");
         return;
+      }
+
+      const isTargetMonitored = this.patientAccounts.includes(this.transferTo);
+      const isTargetUnmonitored = this.unmonitoredPatients.includes(
+        this.transferTo,
+      );
+
+      if (!isTargetMonitored && !isTargetUnmonitored) {
+        this.showAlert("欲轉移目標帳號不存在", "alert-danger");
+        return;
+      }
+
+      if (isTargetUnmonitored) {
+        this.showAlert(
+          "目標帳號尚未加入監測，請先加入監測後再移轉資料",
+          "alert-danger",
+        );
+        return;
+      }
+
+      const targetData = this.patientRecords[this.transferTo];
+      const keys = Object.keys(targetData || {});
+      const defaultKeys = [
+        "isEditing",
+        "limitAmount",
+        "foodCheckboxChecked",
+        "waterCheckboxChecked",
+      ];
+      const isOnlyDefaultKeys =
+        keys.length === defaultKeys.length &&
+        keys.every((k) => defaultKeys.includes(k));
+
+      if (targetData && !isOnlyDefaultKeys) {
+        this.showAlert(
+          "目標帳號已有資料，無法轉移，請先清除資料",
+          "alert-danger",
+        );
+        return;
+      }
+
+      const confirmed = await this.showConfirm(
+        `確定要將 ${this.transferFrom} 的資料轉移到 ${this.transferTo} 嗎?`,
+      );
+      if (!confirmed) return;
+
+      // Transfer
+      await this.updateRecords(
+        this.transferTo,
+        this.patientRecords[this.transferFrom],
+      );
+
+      // Clear
+      await this.clearPatientData(this.transferFrom, false);
+
+      this.showAlert(
+        `資料已成功從 ${this.transferFrom} 轉移到 ${this.transferTo}`,
+      );
+      bootstrap.Modal.getInstance(
+        document.getElementById("transferModal"),
+      ).hide();
+      await this.syncMonitorData();
+    },
+    async clearPatientData(patient, needConfirm = true) {
+      if (needConfirm) {
+        const confirmed = await this.showConfirm(
+          `確定要清除 ${patient} 的所有資料嗎?此操作無法還原。`,
+        );
+        if (!confirmed) {
+          return;
+        }
       }
 
       try {
