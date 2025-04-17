@@ -1,5 +1,6 @@
 import os
 import unittest
+from datetime import date, datetime
 from unittest.mock import patch
 
 import db
@@ -245,6 +246,34 @@ class TestAPIEndpoints(unittest.TestCase):
 
         db.add_account("patientX", "def456", db.AccountType.PATIENT)
 
+        today = date.today()
+        key = f"{today.year}_{today.month}_{today.day}"
+        display_date = f"{today.month}/{today.day}"
+        update_data = {
+            "isEditing": False,
+            "limitAmount": "",
+            "foodCheckboxChecked": False,
+            "waterCheckboxChecked": False,
+            key: {
+                "data": [
+                    {
+                        "time": datetime.now().strftime("%H:%M"),
+                        "food": 100,
+                        "water": 200,
+                        "urination": 1,
+                        "defecation": 0,
+                    }
+                ],
+                "count": 1,
+                "recordDate": display_date,
+                "foodSum": 100,
+                "waterSum": 200,
+                "urinationSum": 1,
+                "defecationSum": 0,
+                "weight": "53.12 kg",
+            },
+        }
+
         mocked_load_json_file.data["patientX"] = {}
         res = client.post(
             "/",
@@ -253,7 +282,7 @@ class TestAPIEndpoints(unittest.TestCase):
                 "account": "patientX",
                 "password": "def456",
                 "patient": "patientX",
-                "data": {"note": "ok"},
+                "data": update_data,
             },
         )
         self.assertEqual(res.json()["message"], UPDATE_RECORD_SUCCESS)
@@ -268,7 +297,34 @@ class TestAPIEndpoints(unittest.TestCase):
             },
         )
         self.assertEqual(res.json()["message"], FETCH_RECORD_SUCCESS)
-        self.assertEqual(res.json()["account_records"], {"note": "ok"})
+
+        future = date.today().replace(year=today.year + 1)
+        invalid_key = f"{future.year}_{future.month}_{future.day}"
+        update_data[invalid_key] = update_data[key]
+        res = client.post(
+            "/",
+            json={
+                "event": UPDATE_RECORD,
+                "account": "patientX",
+                "password": "def456",
+                "patient": "patientX",
+                "data": update_data,
+            },
+        )
+        self.assertIn("Invalid record format", res.json()["message"])
+        update_data.pop(invalid_key)
+
+        res = client.post(
+            "/",
+            json={
+                "event": FETCH_RECORD,
+                "account": "patientX",
+                "password": "def456",
+                "patient": "patientX",
+            },
+        )
+        self.assertEqual(res.json()["message"], FETCH_RECORD_SUCCESS)
+        self.assertEqual(res.json()["account_records"], update_data)
 
     @patch("main.load_json_file", side_effect=mocked_load_json_file)
     def test_invalid_token(self, _):
