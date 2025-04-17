@@ -112,11 +112,22 @@ class PatientData(BaseModel):
 
         values["records"] = records
 
-        for key in records:
-            if parse_date_key(key) > date.today():
-                raise ValueError(f"record key {key} is in the future")
-
         return values
+
+    @model_validator(mode="after")
+    def check_key_and_record_date(self):
+        for key, record in self.records.items():
+            key_date = parse_date_key(key)
+            if key_date > date.today():
+                raise ValueError(f"record key {key} is in the future")
+            record_date = parse_record_date(record.recordDate)
+            if (
+                key_date.month != record_date.month
+                or key_date.day != record_date.day
+            ):
+                raise ValueError(
+                    f"recordDate {record_date} should be equal to record key {key_date}"
+                )
 
 
 class UpdateDataModel(RootModel[PatientData]):
