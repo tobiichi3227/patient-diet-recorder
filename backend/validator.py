@@ -74,9 +74,15 @@ class DailyRecord(BaseModel):
             raise ValueError(f"recordDate is in the future: {self.recordDate}")
 
         if self.weight != "NaN":
-            if not re.fullmatch(r"(-?\d+(?:\.\d{0,2})?) kg", self.weight):
-                raise ValueError(f"invalid weight format: {self.weight}")
-            weight_val = float(self.weight.split()[0])
+            w = self.weight.split(" ")
+            if len(w) != 2:
+                raise ValueError("")
+            weight_val, kg = w
+
+            if kg != "kg":
+                raise ValueError("")
+
+            weight_val = float(weight_val)
             if weight_val <= 0:
                 raise ValueError("weight must be a positive integer")
 
