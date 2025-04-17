@@ -1,4 +1,3 @@
-import re
 from datetime import date, datetime
 from datetime import time as time_cls
 from typing import Any
@@ -65,9 +64,6 @@ class DailyRecord(BaseModel):
                 raise ValueError(
                     f"{field}Sum expected {expected}, got {actual}"
                 )
-
-            if not isinstance(actual, int):
-                raise ValueError
 
         record_date = parse_record_date(self.recordDate)
         if record_date > date.today():
