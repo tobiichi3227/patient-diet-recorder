@@ -17,7 +17,7 @@ def parse_date_key(key: str) -> date:
         y, m, d = map(int, key.split("_"))
         return date(y, m, d)
     except Exception as e:
-        raise ValueError(e) from e
+        raise ValueError(f"Invalid date key: `{key}`") from e
 
 
 def parse_record_date(value: str) -> date:
@@ -25,14 +25,14 @@ def parse_record_date(value: str) -> date:
         m, d = map(int, value.split("/"))
         return date.today().replace(month=m, day=d)
     except Exception as e:
-        raise ValueError(e) from e
+        raise ValueError(f"Invalid date key: `{value}`") from e
 
 
 def parse_time(value: str) -> time_cls:
     try:
         return datetime.strptime(value, "%H:%M").time()
     except Exception as e:
-        raise ValueError(e) from e
+        raise ValueError(f"Invalid date key: `{value}`") from e
 
 
 class RecordItem(BaseModel):
