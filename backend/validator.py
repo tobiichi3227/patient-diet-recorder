@@ -113,6 +113,9 @@ class PatientData(BaseModel):
         records = {k: v for k, v in values.items() if k not in reserved}
 
         values["records"] = records
+        for key in list(values):
+            if key not in reserved and key != "records":
+                values.pop(key)
 
         return values
 
