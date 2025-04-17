@@ -270,7 +270,7 @@ class TestAPIEndpoints(unittest.TestCase):
                 "waterSum": 200,
                 "urinationSum": 1,
                 "defecationSum": 0,
-                "weight": "53.123 kg",
+                "weight": "53.12 kg",
             },
         }
 
