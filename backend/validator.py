@@ -24,14 +24,14 @@ def parse_record_date(value: str) -> date:
         m, d = map(int, value.split("/"))
         return date.today().replace(month=m, day=d)
     except Exception as e:
-        raise ValueError(f"Invalid date key: `{value}`") from e
+        raise ValueError(f"Invalid recordDate: `{value}`") from e
 
 
 def parse_time(value: str) -> time_cls:
     try:
         return datetime.strptime(value, "%H:%M").time()
     except Exception as e:
-        raise ValueError(f"Invalid date key: `{value}`") from e
+        raise ValueError(f"Invalid time: `{value}`") from e
 
 
 class RecordItem(BaseModel):
@@ -72,15 +72,15 @@ class DailyRecord(BaseModel):
         if self.weight != "NaN":
             w = self.weight.split(" ")
             if len(w) != 2:
-                raise ValueError("")
+                raise ValueError(f"Invalid weight format: `{self.weight}`")
             weight_val, kg = w
 
             if kg != "kg":
-                raise ValueError("")
+                raise ValueError(f"Expected 'kg' unit, got '{kg}'")
 
             weight_val = float(weight_val)
             if weight_val <= 0:
-                raise ValueError("weight must be a positive integer")
+                raise ValueError("weight must be a positive floating number")
 
         for record in self.data:
             if record_date < date.today():
