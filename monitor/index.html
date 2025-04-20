@@ -109,48 +109,63 @@
       </template>
 
       <template v-else>
-        <!-- DATE, Seacrh Patient Bar, Manage, Sign Up Patient, TIME -->
-        <div class="time-bar mb-4 mt-1">
-          <div class="row">
-            <div class="col-7 col-md-3 fw-bold" style="font-size: 24px">
-              {{ currentDate }}
+        <div
+          class="row align-items-center mb-3 sticky-top bg-light py-2 shadow-sm"
+          style="z-index: 1030"
+        >
+          <div
+            class="col-6 col-md-3 col-lg-3 fw-bold fs-6 text-nowrap text-secondary"
+          >
+            <i class="fas fa-calendar-alt me-1"></i> {{ currentDate }}
+          </div>
+
+          <div class="col-12 col-md-3 col-lg-3 order-md-2 order-3 mt-2 mt-md-0">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text"
+                ><i class="fa-solid fa-search"></i
+              ></span>
+              <input
+                type="search"
+                class="form-control"
+                v-model="searchQuery"
+                placeholder="依病床號搜尋..."
+                aria-label="Search patient"
+              />
             </div>
-            <div class="col-7 col-md-4 mt-1">
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="searchQuery"
-                  @input="filterPatients"
-                  placeholder="查詢病床號..."
-                />
-                <button type="submit" class="btn btn-light border">
-                  <i class="fa-solid fa-search"></i>
-                </button>
-              </div>
-            </div>
-            <div class="col-5 col-md-3 mt-1 d-flex align-items-start">
-              <button
-                class="btn btn-primary me-2"
-                data-bs-toggle="modal"
-                data-bs-target="#manageModal"
-              >
-                管理
-              </button>
-              <button
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#signUpModal"
-              >
-                註冊
-              </button>
-            </div>
-            <div
-              class="col-5 col-md-1 position-absolute top-0 end-0 mt-1 mx-4 fw-bold text-end"
-              style="font-size: 24px"
+          </div>
+
+          <div
+            class="col-12 col-md-4 col-lg-4 order-md-3 order-4 mt-2 mt-md-0 d-flex gap-2"
+          >
+            <button
+              class="btn btn-sm btn-outline-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#manageModal"
+              title="管理病患"
             >
-              {{ currentTime }}
-            </div>
+              <i class="fas fa-users-cog me-1"></i> 管理
+            </button>
+            <button
+              class="btn btn-sm btn-outline-success"
+              data-bs-toggle="modal"
+              data-bs-target="#signUpModal"
+              title="註冊新病患"
+            >
+              <i class="fas fa-user-plus me-1"></i> 註冊
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              @click="confirmLogout"
+              title="登出"
+            >
+              <i class="fas fa-sign-out-alt me-1"></i> 登出 {{ account }}
+            </button>
+          </div>
+
+          <div
+            class="col-6 col-md-2 col-lg-2 order-md-4 order-2 text-end fw-bold fs-6 text-nowrap text-secondary"
+          >
+            <i class="fas fa-clock me-1"></i> {{ currentTime }}
           </div>
         </div>
 
@@ -517,15 +532,6 @@
           </div>
         </div>
 
-        <!-- Logout -->
-        <div class="row mt-3">
-          <h4 class="col-md-3 offset-md-4 col-5 offset-1">
-            帳號: {{ account }}
-          </h4>
-          <div class="col-md-2 offset-md-0 col-4 offset-2" id="logout">
-            <button class="btn btn-dark" @click="confirmLogout">登出</button>
-          </div>
-        </div>
         <button
           class="btn btn-dark position-fixed bottom-0 end-0 m-3"
           id="scrollToTopBtn"
