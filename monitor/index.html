@@ -773,7 +773,7 @@
           aria-labelledby="qrCodeModalLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="qrCodeModalLabel">
@@ -786,26 +786,36 @@
                   aria-label="關閉"
                 ></button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body text-center">
+                <p class="text-muted">請病患或家屬掃描此 QR Code 登入記錄：</p>
                 <div
-                  class="d-flex justify-content-center"
+                  class="d-flex justify-content-center mb-3"
                   id="qrCodeContainer"
-                  style="display: block"
                 ></div>
-                <div
-                  class="text-center mt-3 d-flex justify-content-center gap-2"
+                <!-- <div class="alert alert-info alert-sm small"> -->
+                <!--   <p class="mb-1"> -->
+                <!--     <strong>登入網址:</strong> -->
+                <!--     <a :href="webUrl + '/patient/'" target="_blank" -->
+                <!--       >{{ webUrl }}/patient/</a -->
+                <!--     > -->
+                <!--   </p> -->
+                <!--   <p class="mb-1"><strong>帳號:</strong> {{ qrCodePatient }}</p> -->
+                <!--   <p class="mb-0"> -->
+                <!--     <strong>密碼:</strong> {{ qrCodePatientPassword }} -->
+                <!--   </p> -->
+                <!-- </div> -->
+              </div>
+              <div class="modal-footer justify-content-center">
+                <button
+                  type="button"
+                  class="btn"
+                  @click="copyQrCodeImage($event)"
                 >
-                  <button
-                    type="button"
-                    class="btn"
-                    @click="copyQrCodeImage($event)"
-                  >
-                    <i class="fas fa-copy"></i>
-                  </button>
-                  <button type="button" class="btn" @click="printQrCode">
-                    <i class="fas fa-print"></i>
-                  </button>
-                </div>
+                  <i class="fas fa-copy"></i>
+                </button>
+                <button type="button" class="btn" @click="printQrCode">
+                  <i class="fas fa-print"></i>
+                </button>
               </div>
             </div>
           </div>
