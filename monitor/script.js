@@ -1084,21 +1084,21 @@ Vue.createApp({
 
         // Validate: If any checkbox is checked, amount must be a valid non-negative integer.
         // If no checkbox is checked, amount should ideally be empty (or ignored).
-        if (foodChecked || waterChecked) {
-          if (
-            limitAmountStr === "" ||
-            isNaN(parseInt(limitAmountStr)) ||
-            parseInt(limitAmountStr) < 0
-          ) {
-            isValid = false;
-            errorMsg = "已勾選限制項目，請輸入有效的限制數值(大於等於 0)。";
-          } else {
-            // Ensure stored value is numeric if valid
-            record.limitAmount = parseInt(limitAmountStr);
-          }
-        } else {
+        if (!foodChecked && !waterChecked) {
+          isValid = false;
+          errorMsg = "請至少勾選一個限制項目。";
           // No checkboxes checked, clear the amount for consistency?
           // record.limitAmount = "";
+        } else if (
+          limitAmountStr === "" ||
+          isNaN(parseInt(limitAmountStr)) ||
+          parseInt(limitAmountStr) < 0
+        ) {
+          isValid = false;
+          errorMsg = "已勾選限制項目，請輸入有效的限制數值(大於等於 0)。";
+        } else {
+          // Ensure stored value is numeric if valid
+          record.limitAmount = parseInt(limitAmountStr);
         }
 
         if (!isValid) {
