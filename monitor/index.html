@@ -174,8 +174,8 @@
           class="row justify-content-start row-cols-1 row-cols-lg-2 g-4 mb-5"
         >
           <div
-            v-for="(patientAccount, index) in filteredPatientAccounts"
-            :key="index"
+            v-for="patientAccount in filteredPatientAccounts"
+            :key="patientAccount"
           >
             <div v-if="patientRecords[patientAccount]" class="col">
               <div class="card shadow h-100">
@@ -214,12 +214,12 @@
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              :id="'food-checkbox-' + index"
+                              :id="`food-checkbox-${patientAccount}`"
                               v-model="patientRecords[patientAccount].foodCheckboxChecked"
                             />
                             <label
                               class="form-check-label small"
-                              :for="'food-checkbox-' + index"
+                              :for="`food-checkbox-${patientAccount}`"
                               >吃</label
                             >
                           </div>
@@ -227,12 +227,12 @@
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              :id="'water-checkbox-' + index"
+                              :id="`water-checkbox-${patientAccount}`"
                               v-model="patientRecords[patientAccount].waterCheckboxChecked"
                             />
                             <label
                               class="form-check-label small"
-                              :for="'water-checkbox-' + index"
+                              :for="`water-checkbox-${patientAccount}`"
                               >水</label
                             >
                           </div>
@@ -355,19 +355,19 @@
                             >
                               <div
                                 class="accordion-item border-0 border-bottom"
-                                v-for="(dailyRecord, index2) in reversedPatientRecords[patientAccount]"
+                                v-for="(dailyRecord, dateKey) in reversedPatientRecords[patientAccount]"
                               >
                                 <h2
                                   class="accordion-header"
-                                  :id="`header-${index2}`"
+                                  :id="`header-${dateKey}`"
                                 >
                                   <button
                                     class="accordion-button collapsed py-2"
                                     type="button"
                                     data-bs-toggle="collapse"
-                                    :data-bs-target="`#collapse-${index2}-${patientAccount}`"
+                                    :data-bs-target="`#collapse-${dateKey}-${patientAccount}`"
                                     aria-expanded="false"
-                                    :aria-controls="`#collapse-${index2}-${patientAccount}`"
+                                    :aria-controls="`#collapse-${dateKey}-${patientAccount}`"
                                   >
                                     <div
                                       class="d-flex w-100 justify-content-between align-items-center small"
@@ -391,9 +391,9 @@
                                 </h2>
 
                                 <div
-                                  :id="`collapse-${index2}-${patientAccount}`"
+                                  :id="`collapse-${dateKey}-${patientAccount}`"
                                   class="accordion-collapse collapse"
-                                  :aria-labelledby="`header-${index2}`"
+                                  :aria-labelledby="`header-${dateKey}`"
                                   :data-bs-parent="`#accordion-daily-${patientAccount}`"
                                 >
                                   <div class="accordion-body p-2">
@@ -438,19 +438,19 @@
                                         </thead>
                                         <tbody>
                                           <tr
-                                            v-for="(data, index3) in dailyRecord.data"
-                                            :key="index3"
+                                            v-for="(recordData, recordIndex) in dailyRecord.data"
+                                            :key="recordIndex"
                                           >
                                             <td
-                                              v-for="(content, columnIndex) in data"
+                                              v-for="(content, columnIndex) in recordData"
                                               class="text-center align-middle"
                                               :key="columnIndex"
                                             >
                                               <input
-                                                v-if="columnIndex !== 'time' && editingRecordPatientAccount === patientAccount && editingRecordIndex === index3"
+                                                v-if="columnIndex !== 'time' && editingRecordPatientAccount === patientAccount && editingRecordIndex === recordIndex"
                                                 class="form-control"
                                                 type="number"
-                                                v-model="dailyRecord['data'][index3][columnIndex]"
+                                                v-model="dailyRecord.data[recordIndex][columnIndex]"
                                               />
                                               <span v-else>
                                                 {{ content }}
@@ -466,7 +466,7 @@
                                                 <i
                                                   class="fas fa-fw"
                                                   :class="editingRecordPatientAccount ? 'fa-check text-success' : 'fa-pen-to-square text-primary'"
-                                                  :id="`${index2}-${index3}`"
+                                                  :id="`${dateKey}-${recordIndex}`"
                                                 >
                                                 </i>
                                               </button>
@@ -477,7 +477,7 @@
                                                 <i
                                                   class="fa-solid"
                                                   :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can text-danger'"
-                                                  :id="`${index2}-${index3}`"
+                                                  :id="`${dateKey}-${recordIndex}`"
                                                 >
                                                 </i>
                                               </button>
