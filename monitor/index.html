@@ -527,10 +527,12 @@
         </div>
 
         <button
-          class="btn btn-dark position-fixed bottom-0 end-0 m-3"
+          class="btn btn-dark position-fixed bottom-0 end-0 m-3 rounded-circle shadow"
+          style="width: 40px; height: 40px; line-height: 1; padding: 0"
           id="scrollToTopBtn"
           @click="scrollToTop"
           v-show="showScrollButton"
+          title="回到頂部"
         >
           <i class="fa-solid fa-arrow-up"></i>
         </button>
