@@ -826,13 +826,16 @@
           class="modal fade"
           id="transferModal"
           tabindex="-1"
+          data-bs-backdrop="static"
           aria-labelledby="transferModalLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="transferModalLabel">轉移資料</h5>
+                <h5 class="modal-title" id="transferModalLabel">
+                  <i class="fas fa-exchange-alt me-2"></i>轉移病患資料
+                </h5>
                 <button
                   type="button"
                   class="btn-close"
@@ -844,12 +847,27 @@
                   請輸入要將
                   <strong>{{ transferFrom }}</strong> 的資料轉移到哪個帳號：
                 </p>
-                <input
-                  v-model="transferTo"
-                  type="text"
-                  class="form-control"
-                  placeholder="輸入目標帳號"
-                />
+                <div class="mb-3">
+                  <label for="transferToAccount" class="form-label"
+                    >目標病患帳號 (監測中)</label
+                  >
+                  <input
+                    type="text"
+                    list="monitored-patients-list"
+                    class="form-control"
+                    id="transferToAccount"
+                    v-model.trim="transferTo"
+                    placeholder="輸入目標病患帳號"
+                    required
+                  />
+                  <datalist id="monitored-patients-list">
+                    <option
+                      v-for="pAcc in monitoredPatientAccounts"
+                      :key="`datalist-${pAcc}`"
+                      :value="pAcc"
+                    ></option>
+                  </datalist>
+                </div>
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">
