@@ -54,56 +54,61 @@
             <h1>護理站數據監測</h1>
           </div>
         </div>
-        <div class="row mt-5">
-          <div class="col-md-4 offset-md-4 col-10 offset-1">
-            <div class="input-group">
-              <span class="input-group-text" id="account-addon">帳號</span>
-              <input
-                type="text"
-                class="form-control"
-                aria-label="account"
-                aria-describedby="account-addon"
-                v-model.trim="account"
-              />
+        <div class="row justify-content-center mt-4">
+          <div class="col-md-6 col-lg-5 col-xl-4">
+            <div class="card shadow-sm">
+              <div class="card-body p-4">
+                <h5 class="card-title text-center mb-4">管理員登入</h5>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="account-addon"
+                    ><i class="fas fa-user"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="帳號"
+                    aria-label="帳號"
+                    aria-describedby="account-addon"
+                    v-model.trim="account"
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="password-addon"
+                    ><i class="fas fa-lock"></i
+                  ></span>
+                  <input
+                    :type="showPassword ? 'text' : 'password'"
+                    class="form-control"
+                    placeholder="密碼"
+                    aria-label="密碼"
+                    aria-describedby="password-addon"
+                    v-model="password"
+                    @keyup.enter="authenticate"
+                  />
+                  <button
+                    class="btn btn-light border"
+                    type="button"
+                    @click="togglePasswordVisibility"
+                    title="顯示/隱藏密碼"
+                  >
+                    <i
+                      class="fa-solid"
+                      :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                      aria-hidden="true"
+                    ></i>
+                  </button>
+                </div>
+                <div class="d-grid">
+                  <button
+                    class="btn btn-primary"
+                    @click="authenticate"
+                    :disabled="!account || !password"
+                  >
+                    <i class="fas fa-sign-in-alt me-2"></i>登入
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-md-4 offset-md-4 col-10 offset-1">
-            <div class="input-group mb-2">
-              <span class="input-group-text" id="password-addon">密碼</span>
-              <input
-                :type="showPassword ? 'text' : 'password'"
-                class="form-control"
-                aria-label="password"
-                aria-describedby="password-addon"
-                v-model="password"
-                @keyup.enter="authenticate"
-              />
-              <button
-                class="btn btn-light border"
-                @click="togglePasswordVisibility"
-                type="button"
-                title="Show/Hide password"
-              >
-                <i
-                  class="fa-solid"
-                  :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-                  aria-hidden="true"
-                ></i>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-md-2 offset-md-7 col-3 offset-8">
-            <button
-              class="btn btn-primary"
-              @click="authenticate"
-              :disabled="!account || !password"
-            >
-              登入
-            </button>
           </div>
         </div>
       </template>
