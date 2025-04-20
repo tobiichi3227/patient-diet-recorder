@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,7 +7,7 @@
 
     <title>Patient Intake/Output Recorder</title>
 
-    <link rel="icon" href="../images/PIOR_logo-512x512.png">
+    <link rel="icon" href="../images/PIOR_logo-512x512.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
@@ -31,10 +31,20 @@
         v-if="bootstrapAlertMessage"
         :class="['alert', bootstrapAlertClass, 'alert-dismissible', 'fade', 'show']"
         role="alert"
-        style="position: fixed; top: 20px; right: 20px; z-index: 10050; min-width: 200px;"
+        style="
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 10050;
+          min-width: 200px;
+        "
       >
         {{ bootstrapAlertMessage }}
-        <button type="button" class="btn-close" @click="bootstrapAlertMessage = ''"></button>
+        <button
+          type="button"
+          class="btn-close"
+          @click="bootstrapAlertMessage = ''"
+        ></button>
       </div>
       <template v-if="!authenticated">
         <div class="row mt-1">
@@ -82,8 +92,9 @@
         <div class="row mt-3">
           <div class="col-md-2 offset-md-5 col-7 offset-1">
             <div class="input-group">
-              <span class="input-group-text"><i class="fa-solid fa-globe"></i
-                ></span>
+              <span class="input-group-text"
+                ><i class="fa-solid fa-globe"></i
+              ></span>
               <select
                 v-model="selectedLanguage"
                 @change="changeLanguage($event.target.value)"
@@ -110,26 +121,24 @@
             </button>
           </div>
         </div>
-        <footer class="footer pt-2 mt-2 bg-light fixed-bottom">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-5 col-12 text-muted">
-                <p class="text-left small">
-                  Copyright © 2023-2025 LifeAdventurer | All Rights Reserved.
-                </p>
+        <footer
+          v-if="!authenticated"
+          class="footer py-3 bg-white fixed-bottom border-top"
+        >
+          <div class="container text-center text-md-start">
+            <div class="row align-items-center">
+              <div class="col-md-5 text-muted small">
+                © 2023–2025 LifeAdventurer. All rights reserved.
               </div>
-              <div class="col-md-3 col-6 text-muted">
-                <p>
-                  Code licensed
-                  <a
-                    href="https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/LICENSE"
-                  >
-                    GPL-3.0
-                  </a>
-                </p>
+              <div class="col-md-3 text-muted small">
+                Code licensed
+                <a
+                  href="https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/LICENSE"
+                  >GPL-3.0</a
+                >
               </div>
-              <div class="col-md-2 col-6 text-muted">
-                <p>Currently v1.2.0</p>
+              <div class="col-md-2 text-muted small">
+                Version: <strong>v1.2.0</strong>
               </div>
             </div>
           </div>
@@ -317,10 +326,7 @@
                     <h3>{{ curLangText.defecation }}</h3>
                   </div>
                   <div class="col-4">
-                    <i
-                      class="fa-solid fa-restroom"
-                      style="font-size: 24px"
-                    >
+                    <i class="fa-solid fa-restroom" style="font-size: 24px">
                     </i>
                   </div>
                 </div>
@@ -374,7 +380,8 @@
                           v-model="inputWeight"
                         />
                         <label for="inputWeight"
-                        >{{ curLangText.unit }}(kg)</label>
+                          >{{ curLangText.unit }}(kg)</label
+                        >
                       </div>
                     </div>
                   </div>
@@ -387,11 +394,7 @@
         <!-- Add new record button -->
         <div class="row mb-2">
           <div class="col text-center">
-            <button
-              type="submit"
-              class="btn btn-primary mb-2"
-              @click="addData"
-            >
+            <button type="submit" class="btn btn-primary mb-2" @click="addData">
               {{ curLangText.create_new_record }}
             </button>
             <div
@@ -407,8 +410,7 @@
                 class="btn-close"
                 @click="hideNotification"
                 aria-label="Close"
-              >
-              </button>
+              ></button>
             </div>
           </div>
         </div>
@@ -482,9 +484,11 @@
                         >
                           <div class="weight">
                             {{ curLangText.weight }}:
-                            <b>{{ dailyRecord["weight"] == 'NaN' ?
+                            <b
+                              >{{ dailyRecord["weight"] == 'NaN' ?
                               curLangText.not_measured : dailyRecord["weight"]
-                              }}</b>
+                              }}</b
+                            >
                           </div>
                         </div>
                         <div
@@ -619,15 +623,31 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalLabel">{{ curLangText.confirm_action }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="confirmModalLabel">
+                  {{ curLangText.confirm_action }}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                ></button>
               </div>
-              <div class="modal-body">
-                {{ confirmMessage }}
-              </div>
+              <div class="modal-body">{{ confirmMessage }}</div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="handleConfirm(false)">{{ curLangText.cancel }}</button>
-                <button type="button" class="btn btn-danger" @click="handleConfirm(true)">{{ curLangText.confirm }}</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="handleConfirm(false)"
+                >
+                  {{ curLangText.cancel }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  @click="handleConfirm(true)"
+                >
+                  {{ curLangText.confirm }}
+                </button>
               </div>
             </div>
           </div>

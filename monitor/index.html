@@ -934,25 +934,24 @@
         </div>
       </template>
 
-      <footer class="footer pt-2 mt-2 bg-light fixed-bottom">
-        <div v-if="!authenticated" class="container">
-          <div class="row">
-            <div class="col-md-5 col-12 text-muted">
-              <p class="text-left small">
-                Copyright © 2023-2025 LifeAdventurer | All Rights Reserved.
-              </p>
+      <footer
+        v-if="!authenticated"
+        class="footer py-3 bg-white fixed-bottom border-top"
+      >
+        <div class="container text-center text-md-start">
+          <div class="row align-items-center">
+            <div class="col-md-5 text-muted small">
+              © 2023–2025 LifeAdventurer. All rights reserved.
             </div>
-            <div class="col-md-3 col-6 text-muted">
-              <p>
-                Code licensed
-                <a
-                  href="https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/LICENSE"
-                  >GPL-3.0</a
-                >
-              </p>
+            <div class="col-md-3 text-muted small">
+              Code licensed
+              <a
+                href="https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/LICENSE"
+                >GPL-3.0</a
+              >
             </div>
-            <div class="col-md-2 col-6 text-muted">
-              <p>Currently v1.2.0</p>
+            <div class="col-md-2 text-muted small">
+              Version: <strong>v1.2.0</strong>
             </div>
           </div>
         </div>
