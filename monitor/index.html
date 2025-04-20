@@ -278,7 +278,7 @@
                   <div class="mb-3">
                     <h6 class="text-muted small mb-1">今日總計</h6>
                     <div
-                      v-if="patientRecords[patientAccount][currentDateYY_MM_DD]"
+                      v-if="patientRecords[patientAccount][currentDateYYYY_M_D]"
                       class="border rounded p-2 bg-light"
                     >
                       <div class="row gx-2 text-center small">
@@ -287,7 +287,7 @@
                             :class="getFoodSumColor(patientAccount) === 'red' ? 'text-danger fw-bold' : ''"
                           >
                             <i class="fas fa-utensils me-1"></i> {{
-                            patientRecords[patientAccount][currentDateYY_MM_DD].foodSum
+                            patientRecords[patientAccount][currentDateYYYY_M_D].foodSum
                             ?? 0 }}g
                           </span>
                         </div>
@@ -296,18 +296,18 @@
                             :class="getWaterSumColor(patientAccount) === 'red' ? 'text-danger fw-bold' : ''"
                           >
                             <i class="fas fa-glass-water me-1"></i> {{
-                            patientRecords[patientAccount][currentDateYY_MM_DD].waterSum
+                            patientRecords[patientAccount][currentDateYYYY_M_D].waterSum
                             ?? 0 }}ml
                           </span>
                         </div>
                         <div class="col border-start" title="排尿總量">
                           <i class="fas fa-toilet me-1"></i> {{
-                          patientRecords[patientAccount][currentDateYY_MM_DD].urinationSum
+                          patientRecords[patientAccount][currentDateYYYY_M_D].urinationSum
                           ?? 0 }}ml
                         </div>
                         <div class="col border-start" title="排便次數">
                           <i class="fas fa-poop me-1"></i> {{
-                          patientRecords[patientAccount][currentDateYY_MM_DD].defecationSum
+                          patientRecords[patientAccount][currentDateYYYY_M_D].defecationSum
                           ?? 0 }}次
                         </div>
                       </div>

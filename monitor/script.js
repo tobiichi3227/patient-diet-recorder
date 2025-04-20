@@ -77,7 +77,7 @@ Vue.createApp({
       // --- Date/Time ---
       currentDate: "", // Formatted date string for display
       currentTime: "", // Formatted time string for display
-      currentDateYY_MM_DD: "", // YYYY_M_D format for record keys
+      currentDateYYYY_M_D: "", // YYYY_M_D format for record keys
     };
   },
 
@@ -229,7 +229,7 @@ Vue.createApp({
       this.currentDate = `${year}.${month}.${day} (${dayOfWeek[d.getDay()]})`;
       this.currentTime = `${hours}:${minutes}:${seconds}`;
       // Consistent key format, ensuring month is not zero-padded if single digit
-      this.currentDateYY_MM_DD = `${year}_${month}_${day}`;
+      this.currentDateYYYY_M_D = `${year}_${month}_${day}`;
     },
 
     // --- API Communication ---
@@ -1670,7 +1670,7 @@ Vue.createApp({
     /** Determines the color for the food sum display based on restrictions */
     getFoodSumColor(patientAccount) {
       const record = this.patientRecords[patientAccount];
-      const todayRecord = record?.[this.currentDateYY_MM_DD];
+      const todayRecord = record?.[this.currentDateYYYY_M_D];
 
       // Ensure necessary data exists and restriction is active
       if (
@@ -1698,7 +1698,7 @@ Vue.createApp({
     /** Determines the color for the water sum display based on restrictions */
     getWaterSumColor(patientAccount) {
       const record = this.patientRecords[patientAccount];
-      const todayRecord = record?.[this.currentDateYY_MM_DD];
+      const todayRecord = record?.[this.currentDateYYYY_M_D];
 
       // Ensure necessary data exists and restriction is active
       if (
