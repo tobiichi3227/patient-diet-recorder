@@ -171,15 +171,18 @@
 
         <!-- Patient Records -->
         <div
-          class="row justify-content-start row-cols-1 row-cols-lg-2 gy-4 mb-2"
+          class="row justify-content-start row-cols-1 row-cols-lg-2 g-4 mb-5"
         >
           <div
             v-for="(patientAccount, index) in filteredPatientAccounts"
             :key="index"
           >
             <div v-if="patientRecords[patientAccount]" class="col">
-              <div class="card shadow h-100 bg-light">
-                <div class="card-body" style="padding-top: 10px">
+              <div class="card shadow h-100">
+                <div
+                  class="card-body d-flex flex-column"
+                  style="padding-top: 10px"
+                >
                   <div class="row">
                     <h3 class="col-3 card-title mb-3">{{ patientAccount }}</h3>
                     <div class="col-1 mt-1">
@@ -205,323 +208,306 @@
                       </svg>
                     </div>
                     <div class="col input-group mb-3">
-                      <div
-                        v-if="patientRecords[patientAccount]['isEditing']"
-                        class="input-group-text"
-                      >
-                        <div class="form-check" style="margin-right: 10px">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            :id="'food-checkbox-' + index"
-                            v-model="patientRecords[patientAccount]['foodCheckboxChecked']"
-                          />
-                          <label
-                            class="form-check-label"
-                            :for="'food-checkbox-' + index"
-                            >吃</label
-                          >
+                      <template v-if="patientRecords[patientAccount].isEditing">
+                        <div class="input-group-text bg-light border-primary">
+                          <div class="form-check form-check-inline me-2 mb-0">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              :id="'food-checkbox-' + index"
+                              v-model="patientRecords[patientAccount].foodCheckboxChecked"
+                            />
+                            <label
+                              class="form-check-label small"
+                              :for="'food-checkbox-' + index"
+                              >吃</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline mb-0">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              :id="'water-checkbox-' + index"
+                              v-model="patientRecords[patientAccount].waterCheckboxChecked"
+                            />
+                            <label
+                              class="form-check-label small"
+                              :for="'water-checkbox-' + index"
+                              >水</label
+                            >
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            :id="'water-checkbox-' + index"
-                            v-model="patientRecords[patientAccount]['waterCheckboxChecked']"
-                          />
-                          <label
-                            class="form-check-label"
-                            :for="'water-checkbox-' + index"
-                            >水</label
-                          >
-                        </div>
-                      </div>
-                      <input
-                        v-if="patientRecords[patientAccount]['isEditing']"
-                        v-model="patientRecords[patientAccount]['limitAmount']"
-                        @input="handleRestrictionInput($event, patientAccount)"
-                        type="text"
-                        class="form-control"
-                        pattern="^[1-9][0-9]*$"
-                        title="請輸入正整數"
-                        placeholder="單位(公克)"
-                        required
-                      />
+                        <input
+                          v-model.number="patientRecords[patientAccount].limitAmount"
+                          @input="handleRestrictionInput($event, patientAccount)"
+                          type="number"
+                          min="0"
+                          step="any"
+                          class="form-control form-control-sm border-primary"
+                          placeholder="限制量 (g/ml)"
+                          aria-label="飲食限制量"
+                          required
+                        />
+                      </template>
                       <input
                         v-else
-                        :value="restrictionText[patientAccount] || '尚未設定限制'"
+                        :value="restrictionText[patientAccount] || '無限制'"
                         type="text"
-                        class="form-control text-center"
-                        :style="{ 'background-color': restrictionText[patientAccount] ? '#fff9db' : 'white' }"
+                        class="form-control form-control-sm text-center"
+                        :class="{'bg-warning bg-opacity-25': restrictionText[patientAccount] }"
+                        aria-label="目前飲食限制"
                         readonly
                       />
                       <button
-                        class="btn btn-primary"
+                        class="btn"
+                        :class="patientRecords[patientAccount].isEditing ? 'btn-secondary' : 'btn-outline-primary'"
                         @click="toggleRestrictionEdit(patientAccount)"
                       >
                         <i
-                          v-if="patientRecords[patientAccount]['isEditing']"
-                          class="fa-solid fa-check"
+                          :class="patientRecords[patientAccount].isEditing ? 'fa-solid fa-check' : 'fa-solid fa-pencil-alt'"
                         ></i>
-                        <i v-else class="fa-solid fa-pencil-alt"></i>
                       </button>
                     </div>
                   </div>
-                  <div class="row">
-                    <template
+
+                  <div class="mb-3">
+                    <h6 class="text-muted small mb-1">今日總計</h6>
+                    <div
                       v-if="patientRecords[patientAccount][currentDateYY_MM_DD]"
+                      class="border rounded p-2 bg-light"
                     >
-                      <div class="table-responsive">
-                        <table class="table table-bordered">
-                          <thead class="table-secondary">
-                            <tr class="text-center">
-                              <th scope="col">
-                                {{
-                                patientRecords[patientAccount][currentDateYY_MM_DD]['recordDate']
-                                }}
-                              </th>
-                              <th scope="col">進食</th>
-                              <th scope="col">喝水</th>
-                              <th scope="col">排尿</th>
-                              <th scope="col">排便</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr class="text-center fw-bold">
-                              <td>總和</td>
-                              <td
-                                :style="{ color: getFoodSumColor(patientAccount) }"
-                              >
-                                {{
-                                patientRecords[patientAccount][currentDateYY_MM_DD]['foodSum']
-                                }}g
-                              </td>
-                              <td
-                                :style="{ color: getWaterSumColor(patientAccount) }"
-                              >
-                                {{
-                                patientRecords[patientAccount][currentDateYY_MM_DD]['waterSum']
-                                }}ml
-                              </td>
-                              <td>
-                                {{
-                                patientRecords[patientAccount][currentDateYY_MM_DD]['urinationSum']
-                                }}ml
-                              </td>
-                              <td>
-                                {{
-                                patientRecords[patientAccount][currentDateYY_MM_DD]['defecationSum']
-                                }}次
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <h4 class="text-center">今日尚無紀錄</h4>
-                    </template>
-                  </div>
-                  <div class="row">
-                    <div class="accordion">
-                      <div class="accordion-item shadow bg-light">
-                        <h2 class="accordion-header" id="recordSection">
-                          <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            :data-bs-target="`#content_${index}`"
-                            aria-expanded="false"
-                            :aria-controls="`content_${index}`"
+                      <div class="row gx-2 text-center small">
+                        <div class="col" title="進食總量">
+                          <span
+                            :class="getFoodSumColor(patientAccount) === 'red' ? 'text-danger fw-bold' : ''"
                           >
-                            <div class="row">
-                              <div class="col-6" style="white-space: nowrap">
-                                <b>所有紀錄</b>
-                              </div>
-                              <div class="col-6" style="white-space: nowrap">
-                                <b
-                                  >{{ getFirstAndLastDates(patientAccount) }}</b
-                                >
-                              </div>
-                            </div>
-                          </button>
-                        </h2>
-                        <div
-                          class="accordion-collapse collapse"
-                          :id="`content_${index}`"
-                          aria-labelledby="recordSection"
-                          data-bs-parent="#accordionExample"
+                            <i class="fas fa-utensils me-1"></i> {{
+                            patientRecords[patientAccount][currentDateYY_MM_DD].foodSum
+                            ?? 0 }}g
+                          </span>
+                        </div>
+                        <div class="col border-start" title="飲水總量">
+                          <span
+                            :class="getWaterSumColor(patientAccount) === 'red' ? 'text-danger fw-bold' : ''"
+                          >
+                            <i class="fas fa-glass-water me-1"></i> {{
+                            patientRecords[patientAccount][currentDateYY_MM_DD].waterSum
+                            ?? 0 }}ml
+                          </span>
+                        </div>
+                        <div class="col border-start" title="排尿總量">
+                          <i class="fas fa-toilet me-1"></i> {{
+                          patientRecords[patientAccount][currentDateYY_MM_DD].urinationSum
+                          ?? 0 }}ml
+                        </div>
+                        <div class="col border-start" title="排便次數">
+                          <i class="fas fa-poop me-1"></i> {{
+                          patientRecords[patientAccount][currentDateYY_MM_DD].defecationSum
+                          ?? 0 }}次
+                        </div>
+                      </div>
+                    </div>
+
+                    <div v-else class="text-center text-muted small p-2">
+                      (今日尚無紀錄)
+                    </div>
+                  </div>
+
+                  <div class="accordion flex-grow-1">
+                    <div class="accordion-item shadow bg-light">
+                      <h2 class="accordion-header" id="recordSection">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          :data-bs-target="`#content_${index}`"
+                          aria-expanded="false"
+                          :aria-controls="`content_${index}`"
                         >
-                          <div class="accordion-body" style="padding: 8px 10px">
-                            <template
-                              v-if="JSON.stringify(patientRecords[patientAccount]) !== '{}'"
+                          <div class="row">
+                            <div class="col-6" style="white-space: nowrap">
+                              <b>所有紀錄</b>
+                            </div>
+                            <div class="col-6" style="white-space: nowrap">
+                              <b>{{ getFirstAndLastDates(patientAccount) }}</b>
+                            </div>
+                          </div>
+                        </button>
+                      </h2>
+                      <div
+                        class="accordion-collapse collapse"
+                        :id="`content_${index}`"
+                        aria-labelledby="recordSection"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div class="accordion-body" style="padding: 8px 10px">
+                          <template
+                            v-if="JSON.stringify(patientRecords[patientAccount]) !== '{}'"
+                          >
+                            <div
+                              v-for="(dailyRecord, index2) in reversedPatientRecords[patientAccount]"
                             >
-                              <div
-                                v-for="(dailyRecord, index2) in reversedPatientRecords[patientAccount]"
-                              >
-                                <div class="accordion">
-                                  <div class="accordion-item shadow bg-light">
-                                    <h2
-                                      class="accordion-header"
-                                      id="recordSection"
+                              <div class="accordion">
+                                <div class="accordion-item shadow bg-light">
+                                  <h2
+                                    class="accordion-header"
+                                    id="recordSection"
+                                  >
+                                    <button
+                                      class="accordion-button collapsed"
+                                      type="button"
+                                      data-bs-toggle="collapse"
+                                      :data-bs-target="`#content_${index2}`"
+                                      aria-expanded="false"
+                                      :aria-controls="`content_${index2}`"
                                     >
-                                      <button
-                                        class="accordion-button collapsed"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        :data-bs-target="`#content_${index2}`"
-                                        aria-expanded="false"
-                                        :aria-controls="`content_${index2}`"
-                                      >
-                                        <div class="row">
-                                          <div
-                                            class="col-4"
-                                            style="
-                                              font-size: 20px;
-                                              margin-left: -10px;
-                                            "
-                                          >
-                                            <div class="recordDate">
-                                              <b
-                                                >{{ dailyRecord['recordDate']
-                                                }}</b
-                                              >
-                                            </div>
-                                          </div>
-                                          <div
-                                            class="col-6"
-                                            style="
-                                              font-size: 18px;
-                                              margin-left: 6px;
-                                            "
-                                          >
-                                            <div class="weight">
-                                              <b
-                                                >體重: {{ dailyRecord['weight']
-                                                == 'NaN' ? '未測量' :
-                                                dailyRecord['weight'] }}</b
-                                              >
-                                            </div>
-                                          </div>
-                                          <div
-                                            class="col-2"
-                                            style="
-                                              white-space: nowrap;
-                                              font-size: 18px;
-                                            "
-                                          >
-                                            <div class="count">
-                                              <b
-                                                >{{ dailyRecord['count']
-                                                }}筆資料</b
-                                              >
-                                            </div>
+                                      <div class="row">
+                                        <div
+                                          class="col-4"
+                                          style="
+                                            font-size: 20px;
+                                            margin-left: -10px;
+                                          "
+                                        >
+                                          <div class="recordDate">
+                                            <b
+                                              >{{ dailyRecord['recordDate']
+                                              }}</b
+                                            >
                                           </div>
                                         </div>
-                                      </button>
-                                    </h2>
+                                        <div
+                                          class="col-6"
+                                          style="
+                                            font-size: 18px;
+                                            margin-left: 6px;
+                                          "
+                                        >
+                                          <div class="weight">
+                                            <b
+                                              >體重: {{ dailyRecord['weight'] ==
+                                              'NaN' ? '未測量' :
+                                              dailyRecord['weight'] }}</b
+                                            >
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="col-2"
+                                          style="
+                                            white-space: nowrap;
+                                            font-size: 18px;
+                                          "
+                                        >
+                                          <div class="count">
+                                            <b
+                                              >{{ dailyRecord['count']
+                                              }}筆資料</b
+                                            >
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </button>
+                                  </h2>
+                                  <div
+                                    class="accordion-collapse collapse"
+                                    :id="`content_${index2}`"
+                                    aria-labelledby="recordSection"
+                                    data-bs-parent="#accordionExample"
+                                  >
                                     <div
-                                      class="accordion-collapse collapse"
-                                      :id="`content_${index2}`"
-                                      aria-labelledby="recordSection"
-                                      data-bs-parent="#accordionExample"
+                                      class="accordion-body"
+                                      style="padding: 8px 10px"
                                     >
-                                      <div
-                                        class="accordion-body"
-                                        style="padding: 8px 10px"
-                                      >
-                                        <div class="table-responsive">
-                                          <table
-                                            class="table table-hover table-bordered"
-                                            style="font-size: 18px"
-                                          >
-                                            <thead class="table-secondary">
-                                              <tr class="text-center">
-                                                <th scope="col">時間</th>
-                                                <th scope="col">進食</th>
-                                                <th scope="col">喝水</th>
-                                                <th scope="col">排尿</th>
-                                                <th scope="col">排便</th>
-                                                <th scope="col"></th>
-                                              </tr>
-                                            </thead>
-                                            <tbody class="table-group-divider">
-                                              <tr
-                                                v-for="(data, index3) in dailyRecord['data']"
-                                                :key="index3"
+                                      <div class="table-responsive">
+                                        <table
+                                          class="table table-hover table-bordered"
+                                          style="font-size: 18px"
+                                        >
+                                          <thead class="table-secondary">
+                                            <tr class="text-center">
+                                              <th scope="col">時間</th>
+                                              <th scope="col">進食</th>
+                                              <th scope="col">喝水</th>
+                                              <th scope="col">排尿</th>
+                                              <th scope="col">排便</th>
+                                              <th scope="col"></th>
+                                            </tr>
+                                          </thead>
+                                          <tbody class="table-group-divider">
+                                            <tr
+                                              v-for="(data, index3) in dailyRecord['data']"
+                                              :key="index3"
+                                            >
+                                              <td
+                                                v-for="(content, columnIndex) in data"
+                                                class="text-center"
+                                                :key="columnIndex"
                                               >
-                                                <td
-                                                  v-for="(content, columnIndex) in data"
-                                                  class="text-center"
-                                                  :key="columnIndex"
-                                                >
-                                                  <input
-                                                    v-if="columnIndex !== 'time' && editingRecordPatientAccount === patientAccount && editingRecordIndex === index3"
-                                                    class="form-control"
-                                                    type="number"
-                                                    v-model="dailyRecord['data'][index3][columnIndex]"
-                                                  />
-                                                  <span v-else>
-                                                    {{ content }}
-                                                  </span>
-                                                </td>
-                                                <td
-                                                  class="justify-content-center align-items-center"
-                                                  style="
-                                                    text-align: center;
-                                                    padding: 8px;
-                                                  "
-                                                >
-                                                  <i
-                                                    @click="toggleRecordEdit($event.target, patientAccount)"
-                                                    :id="`${index2}-${index3}`"
-                                                    class="fa-solid me-1"
-                                                    :class="editingRecordPatientAccount ? 'fa-check' : 'fa-pen-to-square'"
-                                                  >
-                                                  </i>
-                                                  <i
-                                                    @click="removeRecord($event.target, patientAccount)"
-                                                    :id="`${index2}-${index3}`"
-                                                    class="fa-solid"
-                                                    :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
-                                                  >
-                                                  </i>
-                                                </td>
-                                              </tr>
-                                              <tr
-                                                class="table-light text-center fw-bold"
+                                                <input
+                                                  v-if="columnIndex !== 'time' && editingRecordPatientAccount === patientAccount && editingRecordIndex === index3"
+                                                  class="form-control"
+                                                  type="number"
+                                                  v-model="dailyRecord['data'][index3][columnIndex]"
+                                                />
+                                                <span v-else>
+                                                  {{ content }}
+                                                </span>
+                                              </td>
+                                              <td
+                                                class="justify-content-center align-items-center"
+                                                style="
+                                                  text-align: center;
+                                                  padding: 8px;
+                                                "
                                               >
-                                                <td>總和</td>
-                                                <td>
-                                                  {{ dailyRecord['foodSum'] }}
-                                                </td>
-                                                <td>
-                                                  {{ dailyRecord['waterSum'] }}
-                                                </td>
-                                                <td>
-                                                  {{ dailyRecord['urinationSum']
-                                                  }}
-                                                </td>
-                                                <td>
-                                                  {{
-                                                  dailyRecord['defecationSum']
-                                                  }}
-                                                </td>
-                                                <td></td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
+                                                <i
+                                                  @click="toggleRecordEdit($event.target, patientAccount)"
+                                                  :id="`${index2}-${index3}`"
+                                                  class="fa-solid me-1"
+                                                  :class="editingRecordPatientAccount ? 'fa-check' : 'fa-pen-to-square'"
+                                                >
+                                                </i>
+                                                <i
+                                                  @click="removeRecord($event.target, patientAccount)"
+                                                  :id="`${index2}-${index3}`"
+                                                  class="fa-solid"
+                                                  :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can'"
+                                                >
+                                                </i>
+                                              </td>
+                                            </tr>
+                                            <tr
+                                              class="table-light text-center fw-bold"
+                                            >
+                                              <td>總和</td>
+                                              <td>
+                                                {{ dailyRecord['foodSum'] }}
+                                              </td>
+                                              <td>
+                                                {{ dailyRecord['waterSum'] }}
+                                              </td>
+                                              <td>
+                                                {{ dailyRecord['urinationSum']
+                                                }}
+                                              </td>
+                                              <td>
+                                                {{ dailyRecord['defecationSum']
+                                                }}
+                                              </td>
+                                              <td></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </template>
-                            <template v-else>
-                              <h4 class="text-center">無紀錄</h4>
-                            </template>
-                          </div>
+                            </div>
+                          </template>
+                          <template v-else>
+                            <h4 class="text-center">無紀錄</h4>
+                          </template>
                         </div>
                       </div>
                     </div>
