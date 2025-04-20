@@ -1,12 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Patient Intake/Output Recorder</title>
 
-    <link rel="icon" href="./images/PIOR_logo-512x512.png">
+    <link rel="icon" href="./images/PIOR_logo-512x512.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
@@ -23,61 +22,55 @@
     />
   </head>
 
-  <body>
-    <h1 class="text-center mt-2">Patient Intake/Output Recorder</h1>
-    <div class="row mt-4">
-      <div class="col text-center">
+  <body class="bg-light text-dark">
+    <main class="container text-center my-5">
+      <h1 class="mb-4">Patient Intake/Output Recorder</h1>
+
+      <div class="d-flex justify-content-center gap-4 flex-wrap mb-4">
         <button
-          class="btn btn-primary btn-lg me-2"
+          class="btn btn-primary btn-lg"
           onclick="location.href='./patient/'"
         >
-          <h3>
-            Patient Side<i class="fa-solid fa-arrow-right-from-bracket ms-2"></i
-            >
-          </h3>
+          <i class="fa-solid fa-user me-2"></i>
+          Patient Side
         </button>
+
         <button
           class="btn btn-primary btn-lg"
           onclick="location.href='./monitor/'"
         >
-          <h3>
-            Monitor Side<i class="fa-solid fa-arrow-right-from-bracket ms-2"></i
-            >
-          </h3>
+          <i class="fa-solid fa-stethoscope me-2"></i>
+          Monitor Side
         </button>
       </div>
-    </div>
-    <div class="row mt-4">
-      <div class="col text-center">
+
+      <div class="mb-5">
         <button
           type="button"
           class="btn btn-secondary"
           onclick="location.href='https://lifeadventurer.github.io/patient-intake-output-recorder/'"
         >
-          Documentation<i
-            class="fa-solid fa-arrow-up-right-from-square ms-2"
-          ></i>
+          <i class="fa-solid fa-book me-2"></i>
+          Documentation
         </button>
       </div>
-    </div>
-    <footer class="footer pt-2 mt-2 bg-light fixed-bottom">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-5 col-12 text-muted">
-            <p class="text-left small">
-              Copyright © 2023-2025 LifeAdventurer | All Rights Reserved.
-            </p>
+    </main>
+
+    <footer class="footer py-3 bg-white fixed-bottom border-top">
+      <div class="container text-center text-md-start">
+        <div class="row align-items-center">
+          <div class="col-md-5 text-muted small">
+            © 2023–2025 LifeAdventurer. All rights reserved.
           </div>
-          <div class="col-md-3 col-6 text-muted">
-            <p>
-              Code licensed
-              <a
-                href="https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/LICENSE"
-              >GPL-3.0</a>
-            </p>
+          <div class="col-md-3 text-muted small">
+            Code licensed
+            <a
+              href="https://github.com/LifeAdventurer/patient-intake-output-recorder/blob/main/LICENSE"
+              >GPL-3.0</a
+            >
           </div>
-          <div class="col-md-2 col-6 text-muted">
-            <p>Currently v1.2.0</p>
+          <div class="col-md-2 text-muted small">
+            Version: <strong>v1.2.0</strong>
           </div>
         </div>
       </div>
