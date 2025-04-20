@@ -542,54 +542,62 @@
           class="modal fade"
           id="signUpModal"
           tabindex="-1"
+          data-bs-backdrop="static"
           aria-labelledby="signUpModalLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="signUpModalLabel">註冊病患帳號</h5>
+                <h5 class="modal-title" id="signUpModalLabel">
+                  <i class="fas fa-user-plus me-2"></i>註冊新病患帳號
+                </h5>
                 <button
                   type="button"
                   class="btn-close"
                   data-bs-dismiss="modal"
                   aria-label="關閉"
+                  @click="resetSignUpForm()"
                 ></button>
               </div>
               <div class="modal-body">
                 <div
                   v-if="signUpAlertMessage"
-                  :class="['alert', signUpAlertClass]"
+                  :class="['alert', 'alert-sm', signUpAlertClass]"
                   role="alert"
                 >
                   {{ signUpAlertMessage}}
                 </div>
 
                 <form
+                  id="signUpForm"
                   @submit.prevent="signUpPatient"
                   :class="{ 'was-validated' : signUpPatientSubmitted }"
-                  id="signUpForm"
                   novalidate
                 >
                   <div class="mb-3">
                     <label for="signUpPatientAccount" class="form-label"
-                      >帳號</label
+                      >病患帳號</label
                     >
                     <input
                       type="text"
                       class="form-control"
                       id="signUpPatientAccount"
-                      v-model="signUpPatientAccount"
+                      v-model.trim="signUpPatientAccount"
                       required
                       pattern=".*\S.*"
+                      aria-describedby="accountHelpBlock"
                     />
+                    <div id="accountHelpBlock" class="form-text small">
+                      建議使用容易識別的唯一代號，例如病床號。
+                    </div>
                     <div class="invalid-feedback">
                       請輸入有效的帳號 (不能只包含空白字元)。
                     </div>
                   </div>
                   <div class="mb-3">
                     <label for="signUpPatientPassword" class="form-label">
-                      密碼
+                      病患密碼
                     </label>
                     <input
                       type="text"
@@ -597,24 +605,14 @@
                       id="signUpPatientPassword"
                       v-model="signUpPatientPassword"
                       required
+                      aria-describedby="passwordHelpBlock"
                     />
+                    <div id="passwordHelpBlock" class="form-text small">
+                      此密碼供病患或家屬透過 QR Code 登入記錄，請妥善告知。
+                    </div>
                     <div class="invalid-feedback">請輸入密碼。</div>
                   </div>
-                  <div>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="stayOpenAfterSignup"
-                        v-model="stayOpenAfterSignup"
-                      />
-                      <label class="form-check-label" for="stayOpenAfterSignup">
-                        註冊成功後保持此視窗開啟
-                      </label>
-                      <button type="submit" class="btn btn-primary float-end">
-                        註冊
-                      </button>
-                    </div>
+                  <div class="mb-3">
                     <div class="form-check">
                       <input
                         class="form-check-input"
@@ -626,6 +624,30 @@
                         自動將註冊的病患加入監控名單
                       </label>
                     </div>
+                    <div class="form-check mb-2">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="stayOpenAfterSignup"
+                        v-model="stayOpenAfterSignup"
+                      />
+                      <label class="form-check-label" for="stayOpenAfterSignup">
+                        註冊成功後保持此視窗開啟 (方便連續註冊)
+                      </label>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end">
+                    <button
+                      type="button"
+                      class="btn btn-secondary me-2"
+                      data-bs-dismiss="modal"
+                      @click="resetSignUpForm()"
+                    >
+                      取消
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                      <i class="fas fa-check me-1"></i>註冊
+                    </button>
                   </div>
                 </form>
               </div>
