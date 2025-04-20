@@ -462,22 +462,22 @@
                                               <button
                                                 class="btn btn-sm btn-link p-0 me-1"
                                                 @click="toggleRecordEdit($event.target, patientAccount)"
-                                                :id="`${index2}-${index3}`"
                                               >
                                                 <i
                                                   class="fas fa-fw"
                                                   :class="editingRecordPatientAccount ? 'fa-check text-success' : 'fa-pen-to-square text-primary'"
+                                                  :id="`${index2}-${index3}`"
                                                 >
                                                 </i>
                                               </button>
                                               <button
                                                 class="btn btn-sm btn-link p-0"
                                                 @click="removeRecord($event.target, patientAccount)"
-                                                :id="`${index2}-${index3}`"
                                               >
                                                 <i
                                                   class="fa-solid"
                                                   :class="removingRecord ? 'fa-hourglass-half' : 'fa-trash-can text-danger'"
+                                                  :id="`${index2}-${index3}`"
                                                 >
                                                 </i>
                                               </button>
