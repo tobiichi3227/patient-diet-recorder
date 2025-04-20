@@ -7,7 +7,6 @@ from pydantic import (
     BaseModel,
     Field,
     NonNegativeInt,
-    PositiveInt,
     RootModel,
     model_validator,
 )
@@ -109,7 +108,7 @@ class DailyRecord(BaseModel):
 
 class PatientData(BaseModel):
     isEditing: bool
-    limitAmount: str | PositiveInt
+    limitAmount: str | NonNegativeInt
     foodCheckboxChecked: bool
     waterCheckboxChecked: bool
     records: dict[str, DailyRecord] = Field(default_factory=dict)
