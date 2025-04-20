@@ -886,20 +886,26 @@
           class="modal fade"
           id="confirmModal"
           tabindex="-1"
+          data-bs-backdrop="static"
           aria-labelledby="confirmModalLabel"
           aria-hidden="true"
         >
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalLabel">請確認操作</h5>
+                <h5 class="modal-title" id="confirmModalLabel">
+                  <i class="fas fa-question-circle me-2 text-warning"></i>請確認
+                </h5>
                 <button
                   type="button"
                   class="btn-close"
                   data-bs-dismiss="modal"
+                  @click="handleConfirm(false)"
                 ></button>
               </div>
-              <div class="modal-body">{{ confirmMessage }}</div>
+              <div class="modal-body">
+                <p style="white-space: pre-wrap">{{ confirmMessage }}</p>
+              </div>
               <div class="modal-footer">
                 <button
                   type="button"
@@ -922,6 +928,7 @@
           </div>
         </div>
       </template>
+
       <footer class="footer pt-2 mt-2 bg-light fixed-bottom">
         <div v-if="!authenticated" class="container">
           <div class="row">
