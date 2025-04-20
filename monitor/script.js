@@ -111,6 +111,10 @@ Vue.createApp({
   // --- Watchers ---
   // Used for reacting to specific data changes, often for side effects like localStorage
   watch: {
+    authenticated(val) {
+      if (val) this.setupSync();
+      else this.stopSyncInterval();
+    },
     stayOpenAfterSignup(newVal) {
       localStorage.setItem("stayOpenAfterSignup", newVal);
     },
@@ -141,11 +145,6 @@ Vue.createApp({
     // Set up date/time updates
     this.updateDateTime();
     this.dateTimeInterval = setInterval(this.updateDateTime, 1000);
-
-    // Set up data synchronization and visibility handling
-    if (this.authenticated) {
-      this.setupSync();
-    }
   },
 
   mounted() {
@@ -332,7 +331,6 @@ Vue.createApp({
           this.processFetchedData(fetchedData);
           await this.fetchUnmonitoredPatients(); // Fetch unmonitored list
           this.filterPatients(); // Initial filter after getting data
-          this.setupSync(); // Start syncing data
         }
       } catch (error) {
         console.error("Authentication failed:", error);
@@ -360,7 +358,6 @@ Vue.createApp({
         this.patientAccountsWithPasswords = [];
         this.unmonitoredPatients = [];
         this.filteredPatientAccounts = [];
-        this.stopSyncInterval(); // Stop syncing on logout
       }
     },
 
@@ -480,7 +477,6 @@ Vue.createApp({
             fetchedData.message === this.events.messages.ACCT_NOT_EXIST
           ) {
             this.authenticated = false; // Force re-login
-            this.stopSyncInterval();
           }
         }
       } catch (error) {
